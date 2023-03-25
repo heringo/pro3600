@@ -1,9 +1,4 @@
-import yfinance as yf 
-
-# Récupérer les données pour le CAC 40
-cac40 = yf.Ticker("TSLA")
-
-# Récupérer l'historique des prix sur une période donnée
-hist = cac40.history(period="max")
-
-print(hist[:5])
+rr = [1,2,3]
+rrr = list(rr)
+rrr[0]=0
+print(rr,rrr)
