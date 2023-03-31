@@ -10,20 +10,23 @@ def build_cluster(L, connections):
 L = 10  # Taille du réseau
 N = L * L  # Nombre d'agents
 
-print("std::map<UInt, std::vector<char>> nets {")
+print("déclaraction du réseau")
 
 #
 oops = False
-for p100 in range(5, 96):
-    p = p100 / 100.
-    computed = 1.02839 - 2.57318 * p + 1.58727 * p**2
+for p100 in range(5, 96):  
+    p = p100 / 100.             #probabilité de connexion 'p', de 5% à 95%.
+    computed = 1.02839 - 2.57318 * p + 1.58727 * p**2 #proportion de liens basée sur la théorie des réseaux
     
-    if oops or (computed < 1. / N):
+    if oops or (computed < 1. / N): # 1/N : représente le nombre minimal de liens pour chaque agent
         oops = True
     ratio = 1. / N if oops else computed
     
-    number_of_clusters = int(ratio * N)
+    number_of_clusters = int(ratio * N) #Nombre de clusters cibles
 
+    
+    #Génère des réseaux aléatoires en utilisant la probabilité de connexion 'p' et build_cluster
+    #Jusqu'à que le nombre de clusters générées soit égal au nombre de clusters cibles
     while True:
         connections = [random.random() < p for _ in range(2 * N)]
 
@@ -31,12 +34,5 @@ for p100 in range(5, 96):
 
         if np.max(cluster_number) != number_of_clusters:
             continue
-
-        print(f"{{ {p100}, {{", end=" ")
-        for cell in connections:
-            print(f"{'\\1' if cell else '\\0'},", end=" ")
-            print("}},", end="\n")
+        
         break
-
-
-print("};")

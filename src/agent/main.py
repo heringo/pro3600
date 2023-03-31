@@ -16,32 +16,37 @@ BEGIN_DISCARD = 50
 T = 250
 SIM_R = 100
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------ Gestion des tâches : Threading ---------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Les thresads sont des processus légers qui permettent d'exécuter des tâches en parallèle.
 class ThreadPool:
+    #Constructeur
     def __init__(self):
-        self.threads = []
-        self.is_busy = []
-        self.queue = Queue()
-        self.condition = threading.Condition()
+        self.threads = []                           #Stockage des threads
+        self.is_busy = []                           #Indique si un thread est occupé ou non
+        self.queue = Queue()                        #Stocker les tâches à faire
+        self.condition = threading.Condition()      #Notifier les threads lorsqu'une nouvelle tâche est ajoutée à la file d'attente
 
-        # Get the natural number of threads.
-        nr_threads = threading.cpu_count()
+        nr_threads = threading.cpu_count()          #Détermine le nombre de thread à créér en fonction de la machine
 
-        # Assign "not busy" to all threads
-        self.is_busy = [False] * nr_threads
+        self.is_busy = [False] * nr_threads         #Initialise à 'non occupé'
 
-        # Start the main loop for each thread
+        #Création et lancement des thread
         for i in range(nr_threads):
             thread = threading.Thread(target=self.main_loop, args=(i,))
             thread.start()
             self.threads.append(thread)
 
+    #Destructeur (appelé lorsque l'objet est détruit)
     def __del__(self):
         while True:
-            idle_count = self.is_busy.count(False)
+            idle_count = self.is_busy.count(False)      #Compte le nombre de threads 'False'
 
-            if idle_count == len(self.is_busy):
+            if idle_count == len(self.is_busy):         #Si tous les threads sont inactifs
                 for thread in self.threads:
-                    thread.join()
+                    thread.join()                       #La méthode join() bloque le programme jusqu'à ce le thread soit terminé
                 return
 
             time.sleep(1)
@@ -59,15 +64,15 @@ class ThreadPool:
 
     def add_task(self, task_to_add):
         self.queue.put(task_to_add)
-        with self.condition:
-            self.condition.notify()
-            
-'''Ce code Python définit une classe ThreadPool qui permet d'exécuter plusieurs tâches en parallèle en utilisant des threads. 
-Les constantes définies au début du code sont également présentes.
-
-Notez que les bibliothèques standard Python threading et queue sont utilisées pour gérer la synchronisation et la communication entre les threads. 
-La destruction du ThreadPool a été implémentée en utilisant __del__() au lieu du destructeur C++ ~ThreadPool().'''
-
+        with self.condition:                            #verouillage de l'objet condition associé au thread
+            self.condition.notify()                     #La méthode notify() signale à tous les threads en attente l'ajout et de reprendre la vérification de la file d'attente
+   
+   
+   
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------ Outils d'analyse statistique -----------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+        
 # This function returns the vector x appropriately centered.
 def centered(x):
     return x - x.mean()
@@ -112,12 +117,15 @@ def get_returns(filename):
     return returns
 
 
-#This funcition returns the agent number at (i,j) location within the L x L lattice.
-#The agents are stored by columns
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------ Réseau d'Agents ------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Retourne le numéro associé à l'agent (i,j)
 def to_n(L, i, j):
     return i + j * L
 
-#The function returns the east neighbor agent number
+#Retourne le num voisin à l'Est de l'agent n
 def east(L, n):
     if n >= L * L:
         return 0
@@ -126,7 +134,7 @@ def east(L, n):
     m = i + (j + 1) * L
     return m - L * L if m >= L * L else m
 
-#This function return the south neighbor agent number
+#Retourne le num voisin au Sud de l'agent n
 def south(L, n):
     if n >= L * L:
         return 0
@@ -134,7 +142,7 @@ def south(L, n):
     i = n - j * L
     return j * L if i + 1 == L else (i + 1) + j * L
 
-#The function returns the west neighbor agent number
+#Retourne le num voisin à l'Ouest de l'agent n
 def west(L, n):
     if n >= L * L:
         return 0
@@ -142,7 +150,7 @@ def west(L, n):
     i = n - j * L
     return i + (L - 1) * L if j == 0 else i + (j - 1) * L
 
-#The function returns the north neightboor agent number
+#Retourne le num voisin au Nord de l'agent n
 def north(L, n):
     if n >= L * L:
         return 0
@@ -150,8 +158,11 @@ def north(L, n):
     i = n - j * L
     return L - 1 + j * L if i == 0 else i - 1 + j * L
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------ Estimation bootstrap -------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
 
-# This function returns a bootstrapped vector.
+
 def one_draw_from_moving_block_bootstrap(rng, x, block_size):
     T = x.shape[0]
     assert T > block_size
@@ -171,7 +182,11 @@ import numpy as np
 import random
 from scipy.optimize import least_squares
 
+# TODO à replacer
+nr_prms = 4
+nr_stats = 7
 
+#Une classe qui implémente l'opérateur de la fonction appelable "()"
 class BaseFunctor:
     def __init__(self, inputs=None, values=None):
         self.inputs_ = inputs
@@ -190,7 +205,13 @@ class Functor(BaseFunctor):
         self.print_ = print_
         self.stats_ = stats
 
+    #La méthode call() est l'opérateur de la fonction appelable qui est appelé lorsque lorsque l'objet est utilisé comme une une fonction
     def __call__(self, beta, fvec):
+        '''
+        beta : vecteur de paramètres (tableau à 4 valeurs)
+        fvec : vecteur de valeurs de fonction 'fvec' (tableau de 7 valeurs initialisées à zéro)
+        '''
+        
         beta_m = beta[0]
         beta_n = beta[1]
         beta_i = beta[2]
@@ -198,10 +219,10 @@ class Functor(BaseFunctor):
         assert nr_prms == 4
         expr_threshold = 1
 
-        rng = np.random.default_rng()
-        stats_cumul = np.zeros(nr_stats)
+        rng = np.random.default_rng()               #générateur de nombres
+        stats_cumul = np.zeros(nr_stats)           
 
-        for r in range(sim_R):
+        for r in range(sim_R):                      
             dp_tm1 = 0
             trading_volume = 0
 

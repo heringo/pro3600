@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+#Pour chaque matrice de covariance, on cacule les valeurs propres et les somme.
+#La fonction affiche les résultats en imprimant la taille de bloc et la somme des valeurs propres pour chaque matrice Omega dans le fichier
 def main():
     file_path = "mbb-cac40.out"
     K = 10
