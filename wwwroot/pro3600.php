@@ -9,7 +9,7 @@
           #candle {
             position: absolute;
             top: 673px;
-            left: 371.5px;  
+            left: 503px;  
             color: #8295B2;
             background: #1E1E1E;
             border-radius: 40px;
@@ -177,10 +177,29 @@
             height: 32px;
           }
 
+          #heured {
+            position: absolute;
+            top: 673px;
+            left: 907.51px;
+            color: #8295B2;
+            background: #1E1E1E;
+            border-radius: 40px;
+            justify-content: center;
+            align-items: center;
+            padding: 9px;
+            gap: 9px;
+            border: none;
+            font-size: 12px;
+            font-family: 'Arial';
+            font-weight: bold;
+            width: 68.67px;
+            height: 32px;
+          }
+
           #classic {
             position: absolute;
             top: 673px;
-            left: 503px;  
+            left: 371.5px;  
             color: white;
             background: #546EE5;
             border-radius: 40px;
@@ -276,9 +295,10 @@
       <button id="rsi">RSI</button>
       <button id="macd">MACD</button>
       <button id="so">SO</button>
-      <button id="heurea">1H</button>
-      <button id="heureb">4H</button>
-      <button id="heurec">12H</button>
+      <button id="heurea">1M</button>
+      <button id="heureb">6M</button>
+      <button id="heurec">1A</button>
+      <button id="heured">5A</button>
 
       <form method="POST" action="result">
         <search><input type="text" id="inputValue" name="inputValue" placeholder="Search..." class="search-bar"></search>
@@ -288,8 +308,12 @@
       </form>
 
       <?php
-        $fabsi = file("C:\\inetpub\\wwwroot\\absi.txt", FILE_IGNORE_NEW_LINES);
-        $fordo = file("C:\\inetpub\\wwwroot\\ordo.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi = file("C:\\inetpub\\wwwroot\\ressources\\absi.txt", FILE_IGNORE_NEW_LINES);
+        $fordo = file("C:\\inetpub\\wwwroot\\ressources\\ordo.txt", FILE_IGNORE_NEW_LINES);
+        $fopen = file("C:\\inetpub\\wwwroot\\ressources\\open.txt", FILE_IGNORE_NEW_LINES);
+        $fclose = file("C:\\inetpub\\wwwroot\\ressources\\close.txt", FILE_IGNORE_NEW_LINES);
+        $fhigh = file("C:\\inetpub\\wwwroot\\ressources\\high.txt", FILE_IGNORE_NEW_LINES);
+        $flow = file("C:\\inetpub\\wwwroot\\ressources\\low.txt", FILE_IGNORE_NEW_LINES);
       ?>
 
       <script>
@@ -303,12 +327,79 @@
         var heurea = document.getElementById('heurea');
         var heureb = document.getElementById('heureb');
         var heurec = document.getElementById('heurec');
+        var heured = document.getElementById('heured');
+
+        const currentDate = new Date();
+        let newdate = new Date();  // create a new date object
+        newdate.setMonth(currentDate.getMonth() - 1);  // add one month to the date
+
+        var layout = {
+          paper_bgcolor:'rgba(0,0,0,0)',
+          plot_bgcolor:'rgba(0,0,0,0)'
+        };
+
+        var absi = JSON.parse('<?php echo json_encode($fabsi); ?>');
+        var ordo = JSON.parse('<?php echo json_encode($fordo); ?>');
+        var ope = JSON.parse('<?php echo json_encode($fopen); ?>');
+        var close = JSON.parse('<?php echo json_encode($fclose); ?>');
+        var high = JSON.parse('<?php echo json_encode($fhigh); ?>');
+        var low = JSON.parse('<?php echo json_encode($flow); ?>');
+        let intordo = ordo.map(parseFloat);
+        let intopen = ope.map(parseFloat);
+        let intclose = close.map(parseFloat);
+        let inthigh = high.map(parseFloat);
+        let intlow = low.map(parseFloat);
+        let dabsi = absi.map(function(dateString) {
+          return new Date(dateString);
+        });
+        var cdl = false;
+        
+        function myFunction(x) {
+          const currentDate = new Date();
+          let newdate = new Date();  // create a new date object
+          newdate.setMonth(currentDate.getMonth() - x);  // add one month to the date
+          window.filteredDates = dabsi.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate >= newdate && nDate <= currentDate);
+          });
+          window.subordo = intordo.slice(-filteredDates.length-1, -1);
+          window.subopen = intopen.slice(-filteredDates.length-1, -1);
+          window.subclose = intclose.slice(-filteredDates.length-1, -1);
+          window.subhigh = inthigh.slice(-filteredDates.length-1, -1);
+          window.sublow = intlow.slice(-filteredDates.length-1, -1);
+          console.log(subordo);
+          console.log(subopen);
+          console.log(subclose);
+          console.log(subhigh);
+          console.log(sublow);
+          console.log(filteredDates); }
+
+        myFunction(1);
+
+        function mycandle() {
+          TESTER = document.getElementById('tester');
+          Plotly.newPlot( TESTER, [{
+          x: filteredDates,
+          open: subopen,
+          high: subhigh,
+          close: subclose,
+          low: sublow, type: 'candlestick'}], layout);
+        }
+
+        function myplot() {
+          TESTER = document.getElementById('tester');
+          Plotly.newPlot( TESTER, [{
+          x: filteredDates,
+          y: subordo }], layout);
+        }
 
         candle.addEventListener('click', function() {
           candle.style.backgroundColor ='#546EE5';
           candle.style.color = 'white';
           classic.style.backgroundColor ='rgb(30, 30, 30)';
           classic.style.color = '#8295B2';
+          mycandle();
+          cdl = true;
         });
 
         classic.addEventListener('click', function() {
@@ -316,6 +407,8 @@
           classic.style.color = 'white';
           candle.style.backgroundColor ='rgb(30, 30, 30)';
           candle.style.color = '#8295B2';
+          myplot();
+          cdl = false;
         });
 
         heurea.addEventListener('click', function() {
@@ -325,6 +418,12 @@
           heureb.style.color = '#8295B2';
           heurec.style.backgroundColor ='rgb(30, 30, 30)';
           heurec.style.color = '#8295B2';
+          heured.style.backgroundColor ='rgb(30, 30, 30)';
+          heured.style.color = '#8295B2';
+          myFunction(1);
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
         });
 
         heureb.addEventListener('click', function() {
@@ -334,6 +433,12 @@
           heurea.style.color = '#8295B2';
           heurec.style.backgroundColor ='rgb(30, 30, 30)';
           heurec.style.color = '#8295B2';
+          heured.style.backgroundColor ='rgb(30, 30, 30)';
+          heured.style.color = '#8295B2';
+          myFunction(6);
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
         });
 
         heurec.addEventListener('click', function() {
@@ -343,6 +448,27 @@
           heureb.style.color = '#8295B2';
           heurea.style.backgroundColor ='rgb(30, 30, 30)';
           heurea.style.color = '#8295B2';
+          heured.style.backgroundColor ='rgb(30, 30, 30)';
+          heured.style.color = '#8295B2';
+          myFunction(12);
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
+        });
+
+        heured.addEventListener('click', function() {
+          heured.style.backgroundColor ='#546EE5'
+          heured.style.color = 'white';
+          heureb.style.backgroundColor ='rgb(30, 30, 30)';
+          heureb.style.color = '#8295B2';
+          heurea.style.backgroundColor ='rgb(30, 30, 30)';
+          heurea.style.color = '#8295B2';
+          heurec.style.backgroundColor ='rgb(30, 30, 30)';
+          heurec.style.color = '#8295B2';
+          myFunction(60);
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
         });
         
         ema.addEventListener('click', function() {
@@ -395,21 +521,7 @@
           }
         });
 
-        var absi = JSON.parse('<?php echo json_encode($fabsi); ?>');
-        var ordo = JSON.parse('<?php echo json_encode($fordo); ?>');
-        let intordo = ordo.map(parseFloat);
-        console.log(absi);
-        console.log(intordo);
-
-        var layout = {
-          paper_bgcolor:'rgba(0,0,0,0)',
-          plot_bgcolor:'rgba(0,0,0,0)'
-        };
-
-        TESTER = document.getElementById('tester');
-        Plotly.newPlot( TESTER, [{
-        x: absi,
-        y: intordo }], layout);
+        myplot();
 
       </script>
     </body>
