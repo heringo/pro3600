@@ -3,18 +3,37 @@ import threading
 from queue import Queue
 import time
 import math
+import yfinance as yf
+import statistics as stat
+
+import numpy as np
+from scipy.optimize import least_squares
+import scipy.optimize
+import threading
+import os
+
+import numpy as np
+import random
+from scipy.optimize import least_squares
+
+import numpy as np
+import os
+import threading
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 
 # Constants
 NR_STATS = 7
 NR_PARAMS = 4
-R = 100
+R = 2 #TODO R = 100
 BLOCK_SIZE = 250
 L = 64
 N = L * L
 NR_EXCHANGES = 5
 BEGIN_DISCARD = 50
 T = 250
-SIM_R = 100
+SIM_R = 1 #TODO SIM_R = 100
+TEXTE =1
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------ Gestion des tâches : Threading ---------------------------------------------------------------
@@ -75,11 +94,11 @@ class ThreadPool:
         
 # This function returns the vector x appropriately centered.
 def centered(x):
-    return x - x.mean()
+    return x - np.mean(x)
 
 # The vector x is a centered vector!
 def compute_sigma(x):
-    T = x.shape[0]
+    T = len(x)
     s2 = np.square(x).sum()
     return math.sqrt(s2 / (T - 1))
 
@@ -99,22 +118,25 @@ def compute_autocorrelation(x, lag):
 
 def compute_autocorrelation_squares(x, lag):
     squares = x**2
-    centered_squares = squares - squares.mean()
+    centered_squares = squares - stat.mean(squares)
     length = x.shape[0] - lag
     s2 = np.square(centered_squares).sum()
     return np.dot(centered_squares[:length], centered_squares[lag:]) / s2
 
 # This function returns the returns from the prices read into the file.
-def get_returns(filename):
-    with open(filename, "r") as f:
-        data = f.readlines()
-    price = [float(line.strip().split()[1]) for line in data]
-    assert len(price) > 1
-    T = len(price) - 1
-    returns = np.zeros(T)
-    for t in range(T):
-        returns[t] = math.log(price[t + 1] / price[t])
-    return returns
+def get_returns():
+    # Define the ticker list
+    tickers_list = '^FCHI'
+
+    # Extract the necessary data
+    start_day = "2022-01-01"
+    end_day = "2023-01-01"
+
+    tickerData = yf.Ticker(tickers_list)
+    tickerDf = tickerData.history(period='1d', start=start_day, end=end_day)
+    dailyClose = tickerDf['Close'].tolist()
+    return np.array(dailyClose)
+    
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -164,28 +186,28 @@ def north(L, n):
 
 
 def one_draw_from_moving_block_bootstrap(rng, x, block_size):
+    '''
+    'rng' : a random number generator
+    'x' : a time series data (a list or array)
+    'block_size' : the size of the block to be used in the moving block bootstrap method
+    '''
     T = x.shape[0]
     assert T > block_size
     index = np.random.randint(0, T - block_size + 1)
     nr_draws = int(T / block_size)
     tmp = np.zeros(T)
     for i in range(nr_draws):
-        start = index(rng)
+        start = index
         for j in range(block_size):
             tmp[i * block_size:i * block_size + block_size] = x[start:start + block_size]
     remain = T - (nr_draws * block_size)
-    start = index(rng)
+    start = index
     tmp[nr_draws * block_size:nr_draws * block_size + remain] = x[start:start + remain]
     return tmp
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------ Base de Functor -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-import numpy as np
-import random
-from scipy.optimize import least_squares
 
 #Une classe qui implémente l'opérateur de la fonction appelable "()"
 class BaseFunctor:
@@ -203,16 +225,18 @@ class BaseFunctor:
 class Functor(BaseFunctor):
     def __init__(self, stats, print_=False):
         super().__init__(NR_PARAMS, NR_STATS)
+        self.txt = TEXTE
         self.print_ = print_
         self.stats_ = stats
+        self.Price = np.zeros(T)
 
     #La méthode call() est l'opérateur de la fonction appelable qui est appelé lorsque lorsque l'objet est utilisé comme une fonction
-    def __call__(self, beta, fvec):
+    def __call__(self, beta):
         '''
         beta : vecteur de paramètres (tableau à 4 valeurs)
         fvec : vecteur de valeurs de fonction 'fvec' (tableau de 7 valeurs initialisées à zéro)
         '''
-        
+        fvec = np.zeros(NR_STATS)
         beta_m = beta[0]
         beta_n = beta[1]
         beta_i = beta[2]
@@ -230,13 +254,14 @@ class Functor(BaseFunctor):
         dp = np.zeros(T)
 
         for r in range(SIM_R):                      #le nombre de simulation
+            print()
             dp_tm1 = 0
             trading_volume = 0
-
+            price = 7531.61
+            Price = np.zeros(T)
             for t in range(BEGIN_DISCARD + T):
                 shock = rng.standard_normal(N)                                          #Un choc aléatoire est généré
                 expectations = np.power(1 + np.abs(dp_tm1), beta_m) * beta_i * shock    #Initialise des attentes sans connaître celle des voisins
-                
                 
                 for exchange in range(NR_EXCHANGES):
                     for i in range(N):
@@ -259,16 +284,24 @@ class Functor(BaseFunctor):
                         local_trading_volume += 1
 
                 #Calcul du nouveau taux de change
-                dp_tm1 = excess_demand / lambda_
+                dp_tm1 = excess_demand / (lambda_*10)
+                #print(dp_tm1)
 
                 if t >= BEGIN_DISCARD:
                     dp[t - BEGIN_DISCARD] = dp_tm1              #le taux de change est stocké dans le tableau 'dp'
                     trading_volume += local_trading_volume      #le volume de transaction local est ajouté au volume de transaction globale
-
+                    price = price*(1-dp_tm1)
+                    #self.Price[t - BEGIN_DISCARD] += price/5
+                    self.Price[t - BEGIN_DISCARD] = price
+                    print(f'nouveau prix = {price} et trading_volume = {trading_volume}')
+            
+            
             if np.sum(dp) == 0:
                 print("None transactions...")
                 return 0
-
+            
+            #print(dp)
+            
             #différentes statistiques sont calculées à partir des taux de change stockés dans dp
             centered_dp = centered(dp)
             stats_cumul[0] += compute_sigma(centered_dp)
@@ -283,56 +316,61 @@ class Functor(BaseFunctor):
         
         # TODO à modifier
         for j in range(NR_STATS):
+            #print(fvec)
+            #print(stats_cumul)
+            #print(self.stats_)
             fvec[j] = stats_cumul[j] / SIM_R - self.stats_[j]
-
+        
+        print(self.Price)
+        
+        if self.txt :
+            filename = "PredictionAgent.txt"
+            with open(filename, "a") as f:
+                for i in range(len(self.Price)):
+                    f.write(f'{self.Price[i]}\n')
+            self.txt = 0
+            
+            # filename = "PredictionAgentAbscisse.txt"
+            # with open(filename, "a") as f:
+            #     for i in range(len(self.Price)):
+            #         f.write(f'{}')
+            
+        
+        # for i in range(len(self.Price)):
+        #     print(self.Price[i])
+        
+        
         return 1
 
-import numpy as np
-from scipy.optimize import least_squares
-import scipy.optimize
-import threading
-import os
 
-#Cette classe centralise toutes les informations que l'on a besoin pour lancer l'estimation
 class Estimation:
     def __init__(self, r, M, beta0):
-        self.r = r                                      #Le nombre de tâche
-        self.stats = np.transpose(M[:r, :])             #Des statistiques à reproduire, chaque estimation essaye de reproduire des paramètres statistiques
-        self.beta = beta0                               #le point de départ qui deviendra la solution
-        print(f"{r} constructed...")
+        self.r = r
+        self.stats = np.transpose(M[r])
+        self.beta = beta0
+        self.Price = 0 
+        print(self.r, "constructed...")
+        #print(self.stats)
 
     def estimation_task(self):
-        print(f"Task {self.r} starts...")
-        functor = lambda x: (self.stats @ x).reshape((-1, 1))                   #functor est une fonction qui calcule le produit scalaire entre self.stats et x renvoie grâce au reshape(-1,-1) autant de colonne que d'entrée et automatique le nb de ligne
-        numDiff = lambda x: np.gradient(functor(x), axis=0) / 0.0001            #fonction qui calcule le gradient de la fonction functor avec un pas de 0.0001, axis=0 derivée par rapport à la première dérivée de la matrice
-        
-        #Pour minimiser une fonction de plusieurs variables en trouvant des variables qui minimisent la fonction
-        #functor est la fonction a minimiser, 
-        #self.beta sont les valeurs initiales des variables
-        lm = scipy.optimize.least_squares(functor, self.beta, jac=numDiff)
-        print(f"Task {self.r} completes...")                              
-        
-        
-        # Write results to file
-        filename = f"{threading.get_ident()}.txt"
-        with open(filename, "a") as f:
-            f.write(f"{self.r}\t{lm.status}\t")
-            f.write("\t".join(map(str, self.stats.flatten())) + "\t")
-            f.write("\t".join(map(str, lm.x.flatten())) + "\n")
+        print("Task", self.r, "starts...")
+        lm = least_squares(Functor(self.stats), self.beta, method='trf')
+        ret = lm.status
+        print("Task", self.r, "completes...")
+        #filename = f"{threading.get_ident()}.txt"
+        #with open(filename, "a") as f:
+        #    f.write(f"{self.r}\t{ret}\t")
+        #    f.write("\t".join(map(str, self.stats.flatten())) + "\t")
+        #    f.write("\t".join(map(str, lm.x.flatten())) + "\n")
 
-import numpy as np
-import os
-import threading
-from concurrent.futures import ThreadPoolExecutor
-from functools import partial
 
 def main():
 
     rng = np.random.default_rng()
-    returns = get_returns("CAC40-cours-journalier-ôclture.txt")
-    R = 100  # Replace with the correct value for R
-    M = np.zeros((R, NR_STATS))
+    returns = get_returns()
+    M = np.zeros((R, NR_STATS))         #matrice de R lignes et 7 colonnes de statistiques (sigma, kurtosis ...)
 
+    #effectue R simulations échantillons bootstrap dont on calcules les paramètres statistiques
     for r in range(R):
         x = returns if r == 0 else one_draw_from_moving_block_bootstrap(rng, returns, BLOCK_SIZE)
         centered_x = centered(x)
@@ -344,9 +382,13 @@ def main():
         M[r, 5] = compute_autocorrelation_squares(x, 10)
         M[r, 6] = 0.01
 
-    beta = np.array([1.73058, 1.04878, 0.0651077, 1603.94])
-    stats = M[0, :]
-
+    
+    beta = np.array([1.73058, 1.04878, 0.0651077, 1603.94])     #optimisation : source macro-économique, une source liée à son voisinage, une source idiosyncratique
+    #beta0 = np.array([1, 1, 0, 1000])     #stat du l'échantillon d'origine
+    stats = M[0, :]                                            
+    
+    
+    #print(M)
     # TODO initialisation de ret avec estimation_task ?
     
     
@@ -356,14 +398,15 @@ def main():
     #Creation une pool of threads
     with ThreadPoolExecutor() as executor:
         for r in range(1, R):
-            executor.submit(estimations[r].estimation_task)
+            executor.submit(estimations[r].estimation_task())
     #Toutes les tâches ont été exécuté
 
     #Pour chaque paramètre, il calcule la moyenne, le 5%, la médiane, le 95% et le pourcentage
     for j in range(NR_PARAMS):
         tmp = np.array([estimations[r].beta[j] for r in range(R)])
         tmp.sort()
-        print(j, tmp.mean(), tmp[int(0.05 * R)], tmp[int(0.5 * R)], tmp[int(0.95 * R)])
+        print(f"{j}, moyenne = {stat.mean(tmp)}, 5% = {tmp[int(0.05 * R)]},  médiane = {tmp[int(0.5 * R)]}, 95% = {tmp[int(0.95 * R)]}")
+        
 
 if __name__ == "__main__":
     main()
