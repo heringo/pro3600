@@ -177,25 +177,6 @@
             height: 32px;
           }
 
-          #heured {
-            position: absolute;
-            top: 673px;
-            left: 907.51px;
-            color: #8295B2;
-            background: #1E1E1E;
-            border-radius: 40px;
-            justify-content: center;
-            align-items: center;
-            padding: 9px;
-            gap: 9px;
-            border: none;
-            font-size: 12px;
-            font-family: 'Arial';
-            font-weight: bold;
-            width: 68.67px;
-            height: 32px;
-          }
-
           #classic {
             position: absolute;
             top: 673px;
@@ -295,17 +276,16 @@
       <button id="rsi">RSI</button>
       <button id="macd">MACD</button>
       <button id="so">SO</button>
-      <button id="heurea">1M</button>
-      <button id="heureb">6M</button>
-      <button id="heurec">1A</button>
-      <button id="heured">5A</button>
+      <button id="heurea">1H</button>
+      <button id="heureb">6H</button>
+      <button id="heurec">24H</button>
 
       <form method="POST" action="result">
         <search><input type="text" id="inputValue" name="inputValue" placeholder="Search..." class="search-bar"></search>
         <button class="image-button" id="loupe">
           <img src="loupe.png" width="25" class="my-image">
         </button>
-      </form>
+      </form> 
 
       <?php
         $fabsi = file("C:\\inetpub\\wwwroot\\ressources\\absi.txt", FILE_IGNORE_NEW_LINES);
@@ -314,6 +294,11 @@
         $fclose = file("C:\\inetpub\\wwwroot\\ressources\\close.txt", FILE_IGNORE_NEW_LINES);
         $fhigh = file("C:\\inetpub\\wwwroot\\ressources\\high.txt", FILE_IGNORE_NEW_LINES);
         $flow = file("C:\\inetpub\\wwwroot\\ressources\\low.txt", FILE_IGNORE_NEW_LINES);
+        $frabsi = file("C:\\inetpub\\wwwroot\\ressources\\rabsi.txt", FILE_IGNORE_NEW_LINES);
+        $fropen = file("C:\\inetpub\\wwwroot\\ressources\\ropen.txt", FILE_IGNORE_NEW_LINES);
+        $frclose = file("C:\\inetpub\\wwwroot\\ressources\\rclose.txt", FILE_IGNORE_NEW_LINES);
+        $frhigh = file("C:\\inetpub\\wwwroot\\ressources\\rhigh.txt", FILE_IGNORE_NEW_LINES);
+        $frlow = file("C:\\inetpub\\wwwroot\\ressources\\rlow.txt", FILE_IGNORE_NEW_LINES);
       ?>
 
       <script>
@@ -327,16 +312,7 @@
         var heurea = document.getElementById('heurea');
         var heureb = document.getElementById('heureb');
         var heurec = document.getElementById('heurec');
-        var heured = document.getElementById('heured');
 
-        const currentDate = new Date();
-        let newdate = new Date();  // create a new date object
-        newdate.setMonth(currentDate.getMonth() - 1);  // add one month to the date
-
-        var layout = {
-          paper_bgcolor:'rgba(0,0,0,0)',
-          plot_bgcolor:'rgba(0,0,0,0)'
-        };
 
         var absi = JSON.parse('<?php echo json_encode($fabsi); ?>');
         var ordo = JSON.parse('<?php echo json_encode($fordo); ?>');
@@ -344,6 +320,11 @@
         var close = JSON.parse('<?php echo json_encode($fclose); ?>');
         var high = JSON.parse('<?php echo json_encode($fhigh); ?>');
         var low = JSON.parse('<?php echo json_encode($flow); ?>');
+        var rabsi = JSON.parse('<?php echo json_encode($frabsi); ?>');
+        var rope = JSON.parse('<?php echo json_encode($fropen); ?>');
+        var rclose = JSON.parse('<?php echo json_encode($frclose); ?>');
+        var rhigh = JSON.parse('<?php echo json_encode($frhigh); ?>');
+        var rlow = JSON.parse('<?php echo json_encode($frlow); ?>');
         let intordo = ordo.map(parseFloat);
         let intopen = ope.map(parseFloat);
         let intclose = close.map(parseFloat);
@@ -352,7 +333,68 @@
         let dabsi = absi.map(function(dateString) {
           return new Date(dateString);
         });
+        let intropen = rope.map(parseFloat);
+        let intrclose = rclose.map(parseFloat);
+        let intrhigh = rhigh.map(parseFloat);
+        let intrlow = rlow.map(parseFloat);
+        let drabsi = rabsi.map(function(dateString) {
+          return new Date(dateString);
+        });
         var cdl = false;
+
+        for (let i=0; i<drabsi.length; i++) {
+          drabsi[i].setMilliseconds(0);
+        } 
+
+        let check = new Date(drabsi[drabsi.length - 1]);
+        let rangebreaker = [];
+        let debut = new Date();
+        let fin = new Date();
+        debut.setHours(20);
+        debut.setMinutes(00);
+        debut.setSeconds(0);
+        debut.setMilliseconds(0);
+        fin.setHours(13);
+        fin.setMinutes(30);
+        fin.setSeconds(0);
+        debut.setDate(debut.getDate()-1);
+        fin.setMilliseconds(0);
+
+        let jourdebut = new Date();
+        let jourfin = new Date();
+        jourdebut.setHours(0);
+        jourdebut.setMinutes(0);
+        jourdebut.setSeconds(0);
+        jourdebut.setMilliseconds(0);
+        jourfin.setHours(0);
+        jourfin.setMinutes(0);
+        jourfin.setSeconds(0);
+        jourdebut.setDate(jourdebut.getDate()-1);
+        jourfin.setMilliseconds(0);
+
+        function chdate(x) {
+          for (let i = 0; i < drabsi.length; i++) {
+            if (x.getFullYear() === drabsi[i].getFullYear() && x.getMonth() === drabsi[i].getMonth() && x.getDate() === drabsi[i].getDate()) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        function cleaning() {
+          for (let i=0; i<30; i++) {
+            rangebreaker.push({bounds: [new Date(debut), new Date(fin)]});
+            if (!(chdate(check))) {
+              rangebreaker.push({bounds: [new Date(jourdebut), new Date(jourfin)]});
+            }
+            debut.setDate(debut.getDate()-1);
+            fin.setDate(fin.getDate()-1);
+            jourdebut.setDate(jourdebut.getDate()-1);
+            jourfin.setDate(jourfin.getDate()-1);
+            check.setDate(check.getDate()-1);
+          }
+          return rangebreaker;
+        }
         
         function myFunction(x) {
           const currentDate = new Date();
@@ -367,14 +409,29 @@
           window.subclose = intclose.slice(-filteredDates.length-1, -1);
           window.subhigh = inthigh.slice(-filteredDates.length-1, -1);
           window.sublow = intlow.slice(-filteredDates.length-1, -1);
-          console.log(subordo);
-          console.log(subopen);
-          console.log(subclose);
-          console.log(subhigh);
-          console.log(sublow);
-          console.log(filteredDates); }
+          window.layout = {
+            paper_bgcolor:'rgba(0,0,0,0)',
+            plot_bgcolor:'rgba(0,0,0,0)',
+          };
+        }
 
-        myFunction(1);
+        function mynewFunction(x) {
+          window.filteredDates = drabsi.slice(-x*60-1, -1);
+          window.subopen = intropen.slice(-filteredDates.length-1, -1);
+          window.subclose = intrclose.slice(-filteredDates.length-1, -1);
+          window.subhigh = intrhigh.slice(-filteredDates.length-1, -1);
+          window.sublow = intrlow.slice(-filteredDates.length-1, -1);
+          window.subordo = subclose;
+          window.layout = {
+            paper_bgcolor:'rgba(0,0,0,0)',
+            plot_bgcolor:'rgba(0,0,0,0)',
+            xaxis: {
+              rangebreaks: cleaning()
+            }
+          };
+        }
+
+        mynewFunction(1);
 
         function mycandle() {
           TESTER = document.getElementById('tester');
@@ -418,9 +475,7 @@
           heureb.style.color = '#8295B2';
           heurec.style.backgroundColor ='rgb(30, 30, 30)';
           heurec.style.color = '#8295B2';
-          heured.style.backgroundColor ='rgb(30, 30, 30)';
-          heured.style.color = '#8295B2';
-          myFunction(1);
+          mynewFunction(1);
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -433,9 +488,7 @@
           heurea.style.color = '#8295B2';
           heurec.style.backgroundColor ='rgb(30, 30, 30)';
           heurec.style.color = '#8295B2';
-          heured.style.backgroundColor ='rgb(30, 30, 30)';
-          heured.style.color = '#8295B2';
-          myFunction(6);
+          mynewFunction(6);
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -448,24 +501,7 @@
           heureb.style.color = '#8295B2';
           heurea.style.backgroundColor ='rgb(30, 30, 30)';
           heurea.style.color = '#8295B2';
-          heured.style.backgroundColor ='rgb(30, 30, 30)';
-          heured.style.color = '#8295B2';
-          myFunction(12);
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
-        });
-
-        heured.addEventListener('click', function() {
-          heured.style.backgroundColor ='#546EE5'
-          heured.style.color = 'white';
-          heureb.style.backgroundColor ='rgb(30, 30, 30)';
-          heureb.style.color = '#8295B2';
-          heurea.style.backgroundColor ='rgb(30, 30, 30)';
-          heurea.style.color = '#8295B2';
-          heurec.style.backgroundColor ='rgb(30, 30, 30)';
-          heurec.style.color = '#8295B2';
-          myFunction(60);
+          mynewFunction(24*7);
           if (cdl) {
             mycandle();
           } else {myplot();}
