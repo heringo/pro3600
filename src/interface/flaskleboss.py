@@ -43,9 +43,10 @@ def result():
     stock = yf.download(ticker, start_day_train, end_day_train)
     # Période pour laquelle on telecharge les données d'entrainement
     stock_total = yf.download(ticker, start_day_brownian, end_day_train)
+    # Pour avoir les dates futures d'ouverture du marché
     nyse = mcal.get_calendar('NYSE')
     dates_stock_total = nyse.schedule(
-        start_date=start_day_brownian, end_date=end_day_train).index
+        start_date=start_day_brownian, end_date=end_day_pred).index
     dates_pred = [date.strftime('%Y-%m-%d') for date in dates_stock_total]
 ###################################################################################
     volatility = math.sqrt(252) * stock['Close'].pct_change(1).std()
@@ -113,7 +114,7 @@ def result():
 
     ordo = open("CS/Python/templates/ordo.txt", "w")
     absi = open("CS/Python/templates/absi.txt", "w")
-    dates_list_pred = open("CS/Python/templates/dates_list_pred.txt", "w")
+    absi_pred = open("CS/Python/templates/absi_pred.txt", "w")
     ope = open("CS/Python/templates/open.txt", "w")
     close = open("CS/Python/templates/close.txt", "w")
     low = open("CS/Python/templates/low.txt", "w")
@@ -128,6 +129,8 @@ def result():
     fastso = open("CS/Python/templates/fastso.txt", "w")
     slowso = open("CS/Python/templates/slowso.txt", "w")
     brownian = open("CS/Python/templates/brownian.txt", "w")
+    for i in range(len(dates_pred)):
+        absi_pred.write(dates_pred[i]+'\n')
     for i in range(len(values)):
         newo = str(values[i])
         newop = str(op[i])
@@ -143,16 +146,16 @@ def result():
         newhist = str(stock['hist'][i])
         newfastso = str(stock['%K'][i])
         newslowso = str(stock['%D'][i])
-        newbrownian = str(S_plot[i])
+        if i < S_plot.size:
+            newbrownian = str(S_plot[i])
+            brownian.write(newbrownian+'\n')
         newa = str(date[i]).split()[0]
-        newdates = str(dates_pred[i])
         ordo.write(newo+'\n')
         ope.write(newop+'\n')
         close.write(newcl+'\n')
         low.write(newlo+'\n')
         high.write(newhi+'\n')
         absi.write(newa+'\n')
-        dates_list_pred.write(newdates+'\n')
         ewma.write(newewma+'\n')
         bolup.write(newbolup+'\n')
         boldown.write(newboldown+'\n')
@@ -162,13 +165,13 @@ def result():
         hist.write(newhist+'\n')
         fastso.write(newfastso+'\n')
         slowso.write(newslowso+'\n')
-        brownian.write(newbrownian+'\n')
     ordo.close()
     ope.close()
     high.close()
     low.close()
     close.close()
     absi.close()
+    absi_pred.close()
     ewma.close()
     bolup.close()
     boldown.close()
@@ -179,7 +182,6 @@ def result():
     fastso.close()
     slowso.close()
     brownian.close()
-    dates_list_pred.close()
     php_output = subprocess.check_output(
         ['php', 'CS/Python/templates/theoleboss.php'])
     return php_output
