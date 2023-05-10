@@ -519,7 +519,7 @@
         $frapidso = file("./templates/fastso.txt", FILE_IGNORE_NEW_LINES);
         $fslowso = file("./templates/slowso.txt", FILE_IGNORE_NEW_LINES);
         $fbrownian = file("./templates/brownian.txt", FILE_IGNORE_NEW_LINES);
-        $fdates_pred = file("./templates/dates_list_pred.txt", FILE_IGNORE_NEW_LINES);
+        $fdates_pred = file("./templates/absi_pred.txt", FILE_IGNORE_NEW_LINES);
     ?>
     <script>
         var candle = document.getElementById("candle");

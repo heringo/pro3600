@@ -27,7 +27,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     php_output = subprocess.check_output(
-        ['php', './theoleboss.php'])
+        ['php', './templates/theoleboss.php'])
     return php_output
 
 
@@ -68,10 +68,10 @@ def result():
                                         sigma*np.random.normal(0, np.sqrt(deltat))))
 
     min_mape = np.mean(np.abs(
-        (stock_total["Close"] - S[0:N_train-1, 0])/stock_total["Close"]))*100
+        (stock_total["Close"] - S[0:N_train, 0])/stock_total["Close"]))*100
     for y in range(1, i):
         mape = np.mean(np.abs(
-            (stock_total["Close"] - S[0:N_train-1, y])/stock_total["Close"]))*100
+            (stock_total["Close"] - S[0:N_train, y])/stock_total["Close"]))*100
         if mape < min_mape:
             min_mape = mape
             S_plot = S[:, y]
@@ -183,7 +183,7 @@ def result():
     slowso.close()
     brownian.close()
     php_output = subprocess.check_output(
-        ['php', './theoleboss.php'])
+        ['php', './templates/theoleboss.php'])
     return php_output
 
 
