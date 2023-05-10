@@ -27,7 +27,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     php_output = subprocess.check_output(
-        ['php', 'CS/Python/templates/theoleboss.php'])
+        ['php', './theoleboss.php'])
     return php_output
 
 
@@ -55,7 +55,7 @@ def result():
     sigma = volatility
     mu = drift
     T = 1
-    N_train = stock["Close"].size
+    N_train = stock_total["Close"].size
     N_total = len(dates_pred)
     deltat = T/N_train
     i = 10000
@@ -68,10 +68,10 @@ def result():
                                         sigma*np.random.normal(0, np.sqrt(deltat))))
 
     min_mape = np.mean(np.abs(
-        (stock_total["Close"] - S[0:N_total-1, 0])/stock_total["Close"]))*100
+        (stock_total["Close"] - S[0:N_train-1, 0])/stock_total["Close"]))*100
     for y in range(1, i):
         mape = np.mean(np.abs(
-            (stock_total["Close"] - S[0:N_total-1, y])/stock_total["Close"]))*100
+            (stock_total["Close"] - S[0:N_train-1, y])/stock_total["Close"]))*100
         if mape < min_mape:
             min_mape = mape
             S_plot = S[:, y]
@@ -112,23 +112,23 @@ def result():
     # Dates
     date = stock.index[0:len(values)]
 
-    ordo = open("CS/Python/templates/ordo.txt", "w")
-    absi = open("CS/Python/templates/absi.txt", "w")
-    absi_pred = open("CS/Python/templates/absi_pred.txt", "w")
-    ope = open("CS/Python/templates/open.txt", "w")
-    close = open("CS/Python/templates/close.txt", "w")
-    low = open("CS/Python/templates/low.txt", "w")
-    high = open("CS/Python/templates/high.txt", "w")
-    ewma = open("CS/Python/templates/ewma.txt", "w")
-    bolup = open("CS/Python/templates/bolup.txt", "w")
-    boldown = open("CS/Python/templates/boldown.txt", "w")
-    rsi = open("CS/Python/templates/rsi.txt", "w")
-    macd = open("CS/Python/templates/macd.txt", "w")
-    signal = open("CS/Python/templates/signal.txt", "w")
-    hist = open("CS/Python/templates/hist.txt", "w")
-    fastso = open("CS/Python/templates/fastso.txt", "w")
-    slowso = open("CS/Python/templates/slowso.txt", "w")
-    brownian = open("CS/Python/templates/brownian.txt", "w")
+    ordo = open("./templates/ordo.txt", "w")
+    absi = open("./templates/absi.txt", "w")
+    absi_pred = open("./templates/absi_pred.txt", "w")
+    ope = open("./templates/open.txt", "w")
+    close = open("./templates/close.txt", "w")
+    low = open("./templates/low.txt", "w")
+    high = open("./templates/high.txt", "w")
+    ewma = open("./templates/ewma.txt", "w")
+    bolup = open("./templates/bolup.txt", "w")
+    boldown = open("./templates/boldown.txt", "w")
+    rsi = open("./templates/rsi.txt", "w")
+    macd = open("./templates/macd.txt", "w")
+    signal = open("./templates/signal.txt", "w")
+    hist = open("./templates/hist.txt", "w")
+    fastso = open("./templates/fastso.txt", "w")
+    slowso = open("./templates/slowso.txt", "w")
+    brownian = open("./templates/brownian.txt", "w")
     for i in range(len(dates_pred)):
         absi_pred.write(dates_pred[i]+'\n')
     for i in range(len(values)):
@@ -183,7 +183,7 @@ def result():
     slowso.close()
     brownian.close()
     php_output = subprocess.check_output(
-        ['php', 'CS/Python/templates/theoleboss.php'])
+        ['php', './theoleboss.php'])
     return php_output
 
 

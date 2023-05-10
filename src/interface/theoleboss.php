@@ -503,23 +503,23 @@
 
 
     <?php
-        $fabsi = file("CS/Python/templates/absi.txt", FILE_IGNORE_NEW_LINES);
-        $fordo = file("CS/Python/templates/ordo.txt", FILE_IGNORE_NEW_LINES);
-        $fopen = file("CS/Python/templates/open.txt", FILE_IGNORE_NEW_LINES);
-        $fclose = file("CS/Python/templates/close.txt", FILE_IGNORE_NEW_LINES);
-        $fhigh = file("CS/Python/templates/high.txt", FILE_IGNORE_NEW_LINES);
-        $flow = file("CS/Python/templates/low.txt", FILE_IGNORE_NEW_LINES);
-        $fewma = file("CS/Python/templates/ewma.txt", FILE_IGNORE_NEW_LINES);
-        $fbolup = file("CS/Python/templates/bolup.txt", FILE_IGNORE_NEW_LINES);
-        $fboldown = file("CS/Python/templates/boldown.txt", FILE_IGNORE_NEW_LINES);
-        $frsi = file("CS/Python/templates/rsi.txt", FILE_IGNORE_NEW_LINES);
-        $fmacd = file("CS/Python/templates/macd.txt", FILE_IGNORE_NEW_LINES);
-        $fsignal = file("CS/Python/templates/signal.txt", FILE_IGNORE_NEW_LINES);
-        $fhist = file("CS/Python/templates/hist.txt", FILE_IGNORE_NEW_LINES);
-        $frapidso = file("CS/Python/templates/fastso.txt", FILE_IGNORE_NEW_LINES);
-        $fslowso = file("CS/Python/templates/slowso.txt", FILE_IGNORE_NEW_LINES);
-        $fbrownian = file("CS/Python/templates/brownian.txt", FILE_IGNORE_NEW_LINES);
-        $fdates_pred = file("CS/Python/templates/dates_list_pred.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi = file("./templates/absi.txt", FILE_IGNORE_NEW_LINES);
+        $fordo = file("./templates/ordo.txt", FILE_IGNORE_NEW_LINES);
+        $fopen = file("./templates/open.txt", FILE_IGNORE_NEW_LINES);
+        $fclose = file("./templates/close.txt", FILE_IGNORE_NEW_LINES);
+        $fhigh = file("./templates/high.txt", FILE_IGNORE_NEW_LINES);
+        $flow = file("./templates/low.txt", FILE_IGNORE_NEW_LINES);
+        $fewma = file("./templates/ewma.txt", FILE_IGNORE_NEW_LINES);
+        $fbolup = file("./templates/bolup.txt", FILE_IGNORE_NEW_LINES);
+        $fboldown = file("./templates/boldown.txt", FILE_IGNORE_NEW_LINES);
+        $frsi = file("./templates/rsi.txt", FILE_IGNORE_NEW_LINES);
+        $fmacd = file("./templates/macd.txt", FILE_IGNORE_NEW_LINES);
+        $fsignal = file("./templates/signal.txt", FILE_IGNORE_NEW_LINES);
+        $fhist = file("./templates/hist.txt", FILE_IGNORE_NEW_LINES);
+        $frapidso = file("./templates/fastso.txt", FILE_IGNORE_NEW_LINES);
+        $fslowso = file("./templates/slowso.txt", FILE_IGNORE_NEW_LINES);
+        $fbrownian = file("./templates/brownian.txt", FILE_IGNORE_NEW_LINES);
+        $fdates_pred = file("./templates/dates_list_pred.txt", FILE_IGNORE_NEW_LINES);
     ?>
     <script>
         var candle = document.getElementById("candle");
