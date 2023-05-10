@@ -76,6 +76,10 @@ def result():
          hi = stock_total.iloc[:,1]
          lo = stock_total.iloc[:,2]
          cl = stock_total.iloc[:,3]
+         op=op.interpolate()
+         hi=hi.interpolate()
+         lo=lo.interpolate()
+         cl=cl.interpolate()
          date = stock_total.index[0:len(op)]
 
          for i in range(len(op)) :
