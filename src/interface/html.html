@@ -119,6 +119,60 @@
             width: 112.5px;
             height: 32px;
           }
+          #sevenDay{
+            position: absolute;
+            top: 673px;
+            left: 818px;
+            color: #8295B2;
+            background: #1E1E1E;
+            border-radius: 40px;
+            justify-content: center;
+            align-items: center;
+            padding: 9px;
+            gap: 9px;
+            border: none;
+            font-size: 12px;
+            font-family: 'Arial';
+            font-weight: bold;
+            width: 68.67px;
+            height: 32px;
+          }
+          #thirtyDay {
+            position: absolute;
+            top: 673px;
+            left: 890px;
+            color: #8295B2;
+            background: #1E1E1E;
+            border-radius: 40px;
+            justify-content: center;
+            align-items: center;
+            padding: 9px;
+            gap: 9px;
+            border: none;
+            font-size: 12px;
+            font-family: 'Arial';
+            font-weight: bold;
+            width: 68.67px;
+            height: 32px;
+          }
+          #sixtyDay {
+            position: absolute;
+            top: 673px;
+            left: 960px;
+            color: #8295B2;
+            background: #1E1E1E;
+            border-radius: 40px;
+            justify-content: center;
+            align-items: center;
+            padding: 9px;
+            gap: 9px;
+            border: none;
+            font-size: 12px;
+            font-family: 'Arial';
+            font-weight: bold;
+            width: 68.67px;
+            height: 32px;
+          }
 
           #heurea {
             position: absolute;
@@ -401,6 +455,44 @@
             border: 1px solid #222839;
             border-radius: 20px;
           }
+          #rec6 {
+            /* Rectangle 1316 */
+            box-sizing: border-box;
+
+            position: absolute;
+            width: 220px;
+            height: 54px;
+            left: 814px;
+            top: 665px;
+
+            /* gray2 */
+            border: 1px solid #222839;
+            border-radius: 20px;
+            }
+          #rec7 {
+            /* Rectangle 1317 */
+            box-sizing: border-box;
+            position: absolute;
+            width: 165px;
+            height: 54px;
+            left: 640px;
+            top: 665px;
+            /* gray2 */
+            border: 1px solid #222839;
+            border-radius: 20px;
+          }
+          #rec8 {
+            /* Rectangle 1318 */
+            box-sizing: border-box;
+            position: absolute;
+            width: 253px;
+            height: 54px;
+            left: 367px;
+            top: 665px;
+            /* gray2 */
+            border: 1px solid #222839;
+            border-radius: 20px;
+          }
           OAS {
             /* Outils d’Analyse statistiques */
             position: absolute;
@@ -424,6 +516,12 @@
             position: absolute;
             top: 22px;
             left: 805px;           
+          }
+          Forecast {
+            /* Forecast */
+            position: absolute;
+            top: 649px;
+            left: 814px;
           }
           hourLow {
             /* 24h Low */
@@ -487,6 +585,9 @@
       <div id="rec3"></div>
       <div id="rec4"></div>
       <div id="rec5"></div>
+      <div id="rec6"></div>
+      <div id="rec7"></div>
+      <div id="rec8"></div>
 
       <type><span class="txt">Type</span></type>
       <outil><span class="txt">Outils d'Analyse Technique</span></outil>
@@ -506,6 +607,7 @@
       <div style="text-align: center;"><geom><span class="txt" style="display:block;">Modèle Géométrique<br> Brownien</span></geom></div>
       <agentbased><span class="txt">Modèle Basé Agent</span></agentbased>
       <OAS><span class="txt">Outils d’Analyse Statistique</span></OAS>
+      <Forecast><span class="txt">Forecasting</span></Forecast>
 
       
       
@@ -524,6 +626,10 @@
       <button id="sim1">Simulation</button>
       <button id="sim2">Simulation</button>
       <button id="sim3">Simulation</button>
+      <button id="sevenDay">7D</button>
+      <button id="thirtyDay">30D</button>
+      <button id="sixtyDay">60D</button>
+
 
       
       <button class="image-button" id="loupe" onclick="search()">
@@ -548,6 +654,10 @@
         var heurea = document.getElementById('heurea');
         var heureb = document.getElementById('heureb');
         var heurec = document.getElementById('heurec');
+        var sevenDay = document.getElementById('sevenDay');
+        var thirtyDay = document.getElementById('thirtyDay');
+        var sixtyDay = document.getElementById('sixtyDay');
+
         
         
         
@@ -591,6 +701,30 @@
           heureb.style.color = '#8295B2';
           heurea.style.backgroundColor ='rgb(30, 30, 30)';
           heurea.style.color = '#8295B2';
+        });
+        sevenDay.addEventListener('click', function(){
+          sevenDay.style.backgroundColor ='#546EE5'
+          sevenDay.style.color = 'white';
+          thirtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          thirtyDay.style.color = '#8295B2';
+          sixtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sixtyDay.style.color = '#8295B2';
+        });
+        thirtyDay.addEventListener('click', function(){
+          thirtyDay.style.backgroundColor ='#546EE5'
+          thirtyDay.style.color = 'white';
+          sevenDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sevenDay.style.color = '#8295B2';
+          sixtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sixtyDay.style.color = '#8295B2';
+        });
+        sixtyDay.addEventListener('click', function(){
+          sixtyDay.style.backgroundColor ='#546EE5'
+          sixtyDay.style.color = 'white';
+          thirtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          thirtyDay.style.color = '#8295B2';
+          sevenDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sevenDay.style.color = '#8295B2';
         });
         
         ema.addEventListener('click', function() {
