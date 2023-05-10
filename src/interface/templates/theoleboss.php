@@ -291,6 +291,7 @@
         top: 961px;
 
         background: #373d4c;
+        color: #8295b2;
         border-radius: 40px;
       }
       #sim2 {
@@ -308,6 +309,7 @@
         top: 961px;
 
         background: #373d4c;
+        color: #8295b2;
         border-radius: 40px;
       }
       #sim3 {
@@ -325,6 +327,7 @@
         top: 961px;
 
         background: #373d4c;
+        color: #8295b2;
         border-radius: 40px;
       }
       #rec1 {
@@ -643,6 +646,8 @@
           rsi.style.color = '#8295B2';
           so.style.backgroundColor ='rgb(30, 30, 30)';
           so.style.color = '#8295B2';
+          sim3.style.backgroundColor ='rgb(30, 30, 30)'
+          sim3.style.color = '#8295B2';
           mycandle();
           cdl = true;
         });
@@ -671,6 +676,8 @@
           rsi.style.color = '#8295B2';
           so.style.backgroundColor ='rgb(30, 30, 30)';
           so.style.color = '#8295B2';
+          sim3.style.backgroundColor ='rgb(30, 30, 30)'
+          sim3.style.color = '#8295B2';
           myplot();
           cdl = false;
         });
@@ -692,6 +699,8 @@
           rsi.style.color = '#8295B2';
           so.style.backgroundColor ='rgb(30, 30, 30)';
           so.style.color = '#8295B2';
+          sim3.style.backgroundColor ='rgb(30, 30, 30)'
+          sim3.style.color = '#8295B2';
           myFunction(1);
           if (cdl) {
             mycandle();
@@ -715,6 +724,8 @@
           rsi.style.color = '#8295B2';
           so.style.backgroundColor ='rgb(30, 30, 30)';
           so.style.color = '#8295B2';
+          sim3.style.backgroundColor ='rgb(30, 30, 30)'
+          sim3.style.color = '#8295B2';
           myFunction(6);
           if (cdl) {
             mycandle();
@@ -738,6 +749,8 @@
           rsi.style.color = '#8295B2';
           so.style.backgroundColor ='rgb(30, 30, 30)';
           so.style.color = '#8295B2';
+          sim3.style.backgroundColor ='rgb(30, 30, 30)'
+          sim3.style.color = '#8295B2';
           myFunction(12);
           if (cdl) {
             mycandle();
@@ -787,6 +800,8 @@
             rsi.style.color = '#8295B2';
             so.style.backgroundColor ='rgb(30, 30, 30)';
             so.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)'
+            sim3.style.color = '#8295B2';
             myewma();
           } else {
             ema.style.backgroundColor ='rgb(30, 30, 30)'
@@ -849,6 +864,8 @@
                 rsi.style.color = '#8295B2';
                 so.style.backgroundColor ='rgb(30, 30, 30)';
                 so.style.color = '#8295B2';
+                sim3.style.backgroundColor ='rgb(30, 30, 30)'
+                sim3.style.color = '#8295B2';
                 mybollinger();
             } else {
                 bollinger.style.backgroundColor ='rgb(30, 30, 30)'
@@ -901,6 +918,8 @@
             ema.style.color = '#8295B2';
             so.style.backgroundColor ='rgb(30, 30, 30)';
             so.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)'
+            sim3.style.color = '#8295B2';
             myrsi();
           } else {
             rsi.style.backgroundColor ='rgb(30, 30, 30)'
@@ -960,6 +979,8 @@
             rsi.style.color = '#8295B2';
             so.style.backgroundColor ='rgb(30, 30, 30)';
             so.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)'
+            sim3.style.color = '#8295B2';
             mymacd();
           } else {
             macd.style.backgroundColor ='rgb(30, 30, 30)'
@@ -1064,6 +1085,8 @@
             rsi.style.color = '#8295B2';
             ema.style.backgroundColor ='rgb(30, 30, 30)';
             ema.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)'
+            sim3.style.color = '#8295B2';
             myso();
           } else {
             so.style.backgroundColor ='rgb(30, 30, 30)'
@@ -1090,10 +1113,10 @@
             }], layout);
         }
 
-        sim1.addEventListener('click', function() {
-          if (ema.style.backgroundColor == 'rgb(30, 30, 30)') {
-            sim1.style.backgroundColor ='#546EE5'
-            sim1.style.color = 'white';
+        sim3.addEventListener('click', function() {
+          if (sim3.style.backgroundColor == 'rgb(30, 30, 30)') {
+            sim3.style.backgroundColor ='#546EE5'
+            sim3.style.color = 'white';
             bollinger.style.backgroundColor ='rgb(30, 30, 30)';
             bollinger.style.color = '#8295B2';
             macd.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1106,8 +1129,8 @@
             ema.style.color = '#8295B2';
             mybrownian();
           } else {
-            sim1.style.backgroundColor ='rgb(30, 30, 30)'
-            sim1.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)'
+            sim3.style.color = '#8295B2';
             if (cdl) {
               mycandle();
             } else {
