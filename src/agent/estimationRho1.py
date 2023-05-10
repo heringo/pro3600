@@ -10,7 +10,7 @@ def one_draw_from_moving_block_bootstrap(rng, x, block_size):
     '''
     'rng' : a random number generator
     'x' : a time series data (a list or array)
-    'block_size' : the siwze of the block to be used in the moving block bootstrap method
+    'block_size' : the size of the block to be used in the moving block bootstrap method
     
     '''
 
