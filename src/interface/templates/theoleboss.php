@@ -519,7 +519,7 @@
         $frapidso = file("./templates/fastso.txt", FILE_IGNORE_NEW_LINES);
         $fslowso = file("./templates/slowso.txt", FILE_IGNORE_NEW_LINES);
         $fbrownian = file("./templates/brownian.txt", FILE_IGNORE_NEW_LINES);
-        $fdates_pred = file("./templates/absi_pred.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi_pred = file("./templates/absi_pred.txt", FILE_IGNORE_NEW_LINES);
     ?>
     <script>
         var candle = document.getElementById("candle");
@@ -562,7 +562,7 @@
         var fasts = JSON.parse('<?php echo json_encode($frapidso); ?>');
         var slows = JSON.parse('<?php echo json_encode($fslowso); ?>');
         var brownian = JSON.parse('<?php echo json_encode($fbrownian); ?>');
-        var dates_pred = JSON.parse('<?php echo json_encode($fdates_pred); ?>');
+        var absi_pred = JSON.parse('<?php echo json_encode($fabsi_pred); ?>');
 
         let intordo = ordo.map(parseFloat);
         let intopen = ope.map(parseFloat);
@@ -579,8 +579,10 @@
         let intfastso = fasts.map(parseFloat);
         let intslowso = slows.map(parseFloat);
         let intbrownian = brownian.map(parseFloat);
-        let intdates_pred = dates_pred.map(parseFloat);
         let dabsi = absi.map(function(dateString) {
+          return new Date(dateString);
+        });
+        let dabsi_pred = absi_pred.map(function(dateString) {
           return new Date(dateString);
         });
         var cdl = false;
@@ -592,6 +594,10 @@
           window.filteredDates = dabsi.filter(function(date) {
             let nDate = new Date(date);
             return (nDate >= newdate && nDate <= currentDate);
+          });
+          window.filteredDates_pred = dabsi_pred.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate >= newdate);
           });
           window.subordo = intordo.slice(-filteredDates.length-1, -1);
           window.subopen = intopen.slice(-filteredDates.length-1, -1);
@@ -608,7 +614,6 @@
           window.subfastso = intfastso.slice(-filteredDates.length-1, -1);
           window.subslowso = intslowso.slice(-filteredDates.length-1, -1);
           window.subbrownian = intbrownian.slice(-filteredDates.length-1, -1);
-          window.subdates_pred = intdates_pred.slice(-filteredDates.length-1, -1);
         }
         myFunction(1);
         console.log(filteredDates)
@@ -1073,7 +1078,7 @@
         function mybrownian() {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
-            x: filteredDates,
+            x: filteredDates_pred,
             y: subbrownian,
             name: 'Brownian',
             line: {color: 'rgb(243, 156, 18)'}
