@@ -380,6 +380,45 @@
         border: 1px solid #222839;
         border-radius: 20px;
       }
+      #rec6 {
+        display: flex;
+        justify-content: center;
+        lign-items: center;
+        box-sizing: border-box;
+        position: absolute;
+        width: 220px;
+        height: 54px;
+        left: 814px;
+        top: 665px;
+        border: 1px solid #222839;
+        border-radius: 20px;
+      }
+      #rec7 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        position: absolute;
+        width: 165px;
+        height: 54px;
+        left: 640px;
+        top: 665px;
+        border: 1px solid #222839;
+        border-radius: 20px;
+      }
+      #rec8 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        position: absolute;
+        width: 253px;
+        height: 54px;
+        left: 367px;
+        top: 665px;
+        border: 1px solid #222839;
+        border-radius: 20px;
+      }
       OAS {
         position: absolute;
         left: 77px;
@@ -450,6 +489,9 @@
     <div id="rec3"></div>
     <div id="rec4"></div>
     <div id="rec5"></div>
+    <div id="rec6"></div>
+    <div id="rec7"></div>
+    <div id="rec8"></div>
 
     <type><span class="txt">Type</span></type>
     <outil><span class="txt">Outils d'Analyse Technique</span></outil>
