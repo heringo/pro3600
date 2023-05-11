@@ -119,10 +119,28 @@
         height: 32px;
       }
 
-      #heurea {
+      #sevenDay{
         position: absolute;
         top: 673px;
-        left: 644.5px;
+        left: 818px;
+        color: #8295B2;
+        background: #1E1E1E;
+        border-radius: 40px;
+        justify-content: center;
+        align-items: center;
+        padding: 9px;
+        gap: 9px;
+        border: none;
+        font-size: 12px;
+        font-family: 'Arial';
+        font-weight: bold;
+        width: 68.67px;
+        height: 32px;
+      }
+      #thirtyDay {
+        position: absolute;
+        top: 673px;
+        left: 890px;
         color: white;
         background: #546ee5;
         border-radius: 40px;
@@ -132,7 +150,44 @@
         gap: 9px;
         border: none;
         font-size: 12px;
-        font-family: "Arial";
+        font-family: 'Arial';
+        font-weight: bold;
+        width: 68.67px;
+        height: 32px;
+      }
+      #sixtyDay {
+        position: absolute;
+        top: 673px;
+        left: 960px;
+        color: #8295B2;
+        background: #1E1E1E;
+        border-radius: 40px;
+        justify-content: center;
+        align-items: center;
+        padding: 9px;
+        gap: 9px;
+        border: none;
+        font-size: 12px;
+        font-family: 'Arial';
+        font-weight: bold;
+        width: 68.67px;
+        height: 32px;
+      }
+
+      #heurea {
+        position: absolute;
+        top: 673px;
+        left: 644.5px;
+        color: #8295B2;
+        background: #1E1E1E;
+        border-radius: 40px;
+        justify-content: center;
+        align-items: center;
+        padding: 9px;
+        gap: 9px;
+        border: none;
+        font-size: 12px;
+        font-family: 'Arial';
         font-weight: bold;
         width: 68.67px;
         height: 32px;
@@ -142,8 +197,8 @@
         position: absolute;
         top: 673px;
         left: 732.17px;
-        color: #8295b2;
-        background: #1e1e1e;
+        color: #8295B2;
+        background: #1E1E1E;
         border-radius: 40px;
         justify-content: center;
         align-items: center;
@@ -151,26 +206,7 @@
         gap: 9px;
         border: none;
         font-size: 12px;
-        font-family: "Arial";
-        font-weight: bold;
-        width: 68.67px;
-        height: 32px;
-      }
-
-      #heurec {
-        position: absolute;
-        top: 673px;
-        left: 819.84px;
-        color: #8295b2;
-        background: #1e1e1e;
-        border-radius: 40px;
-        justify-content: center;
-        align-items: center;
-        padding: 9px;
-        gap: 9px;
-        border: none;
-        font-size: 12px;
-        font-family: "Arial";
+        font-family: 'Arial';
         font-weight: bold;
         width: 68.67px;
         height: 32px;
@@ -531,9 +567,11 @@
     <button id="rsi">RSI</button>
     <button id="macd">MACD</button>
     <button id="so">SO</button>
-    <button id="heurea">1M</button>
-    <button id="heureb">6M</button>
-    <button id="heurec">1A</button>
+    <button id="heurea">1H</button>
+    <button id="heureb">4H</button>
+    <button id="sevenDay">7D</button>
+    <button id="thirtyDay">30D</button>
+    <button id="sixtyDay">60D</button>
     <button id="sim1">Simulation</button>
     <button id="sim2">Simulation</button>
     <button id="sim3">Simulation</button>
@@ -576,14 +614,13 @@
         var so = document.getElementById("so");
         var heurea = document.getElementById("heurea");
         var heureb = document.getElementById("heureb");
-        var heurec = document.getElementById("heurec");
+        var sevenDay = document.getElementById("sevenDay");
+        var thirtyDay = document.getElementById("thirtyDay");
+        var sixtyDay = document.getElementById("sixtyDay");
         var sim1 = document.getElementById("sim1");
         var sim2 = document.getElementById("sim2");
         var sim3 = document.getElementById("sim3");
 
-        /*const currentDate = new Date();
-        let newdate = new Date();  // create a new date object
-        newdate.setMonth(currentDate.getMonth() - 1);  // add one month to the date*/
 
         var layout = {
           paper_bgcolor:'rgba(0,0,0,0)',
@@ -632,10 +669,10 @@
         });
         var cdl = false;
 
-        function myFunction(x) {
+        function myFunctionD(x) {
           const currentDate = new Date();
           let newdate = new Date();  // create a new date object
-          newdate.setMonth(currentDate.getMonth() - x);  // add one month to the date
+          newdate.setDate(currentDate.getDate() - x);  // take off x days to the date
           window.filteredDates = dabsi.filter(function(date) {
             let nDate = new Date(date);
             return (nDate >= newdate && nDate <= currentDate);
@@ -658,9 +695,9 @@
           window.subhist = inthist.slice(-filteredDates.length-1, -1);
           window.subfastso = intfastso.slice(-filteredDates.length-1, -1);
           window.subslowso = intslowso.slice(-filteredDates.length-1, -1);
-          window.subbrownian = intbrownian.slice(-filteredDates.length-1, -1);
+          window.subbrownian = intbrownian.slice(-filteredDates_pred.length-1, -1);
         }
-        myFunction(1);
+        myFunctionD(30);
         console.log(filteredDates)
 ////////////////////////////////////////////////////////////////////////////
       
@@ -724,13 +761,17 @@
           cdl = false;
         });
 
-        heurea.addEventListener('click', function() {
-          heurea.style.backgroundColor ='#546EE5'
-          heurea.style.color = 'white';
+        sevenDay.addEventListener('click', function() {
+          sevenDay.style.backgroundColor ='#546EE5'
+          sevenDay.style.color = 'white';
+          heurea.style.backgroundColor ='rgb(30, 30, 30)';
+          heurea.style.color = '#8295B2';
           heureb.style.backgroundColor ='rgb(30, 30, 30)';
           heureb.style.color = '#8295B2';
-          heurec.style.backgroundColor ='rgb(30, 30, 30)';
-          heurec.style.color = '#8295B2';
+          thirtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          thirtyDay.style.color = '#8295B2';
+          sixtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sixtyDay.style.color = '#8295B2';
           ema.style.backgroundColor ='rgb(30, 30, 30)';
           ema.style.color = '#8295B2';
           bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -743,19 +784,23 @@
           so.style.color = '#8295B2';
           sim3.style.backgroundColor ='rgb(30, 30, 30)'
           sim3.style.color = '#8295B2';
-          myFunction(1);
+          myFunctionD(7);
           if (cdl) {
             mycandle();
           } else {myplot();}
         });
 
-        heureb.addEventListener('click', function() {
-          heureb.style.backgroundColor ='#546EE5'
-          heureb.style.color = 'white';
+        thirtyDay.addEventListener('click', function() {
+          thirtyDay.style.backgroundColor ='#546EE5'
+          thirtyDay.style.color = 'white';
           heurea.style.backgroundColor ='rgb(30, 30, 30)';
           heurea.style.color = '#8295B2';
-          heurec.style.backgroundColor ='rgb(30, 30, 30)';
-          heurec.style.color = '#8295B2';
+          heureb.style.backgroundColor ='rgb(30, 30, 30)';
+          heureb.style.color = '#8295B2';
+          sevenDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sevenDay.style.color = '#8295B2';
+          sixtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sixtyDay.style.color = '#8295B2';
           ema.style.backgroundColor ='rgb(30, 30, 30)';
           ema.style.color = '#8295B2';
           bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -768,19 +813,23 @@
           so.style.color = '#8295B2';
           sim3.style.backgroundColor ='rgb(30, 30, 30)'
           sim3.style.color = '#8295B2';
-          myFunction(6);
+          myFunctionD(30);
           if (cdl) {
             mycandle();
           } else {myplot();}
         });
 
-        heurec.addEventListener('click', function() {
-          heurec.style.backgroundColor ='#546EE5'
-          heurec.style.color = 'white';
-          heureb.style.backgroundColor ='rgb(30, 30, 30)';
-          heureb.style.color = '#8295B2';
+        sixtyDay.addEventListener('click', function() {
+          sixtyDay.style.backgroundColor ='#546EE5'
+          sixtyDay.style.color = 'white';
           heurea.style.backgroundColor ='rgb(30, 30, 30)';
           heurea.style.color = '#8295B2';
+          heureb.style.backgroundColor ='rgb(30, 30, 30)';
+          heureb.style.color = '#8295B2';
+          sevenDay.style.backgroundColor ='rgb(30, 30, 30)';
+          sevenDay.style.color = '#8295B2';
+          thirtyDay.style.backgroundColor ='rgb(30, 30, 30)';
+          thirtyDay.style.color = '#8295B2';
           ema.style.backgroundColor ='rgb(30, 30, 30)';
           ema.style.color = '#8295B2';
           bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -793,7 +842,7 @@
           so.style.color = '#8295B2';
           sim3.style.backgroundColor ='rgb(30, 30, 30)'
           sim3.style.color = '#8295B2';
-          myFunction(12);
+          myFunctionD(60);
           if (cdl) {
             mycandle();
           } else {myplot();}
