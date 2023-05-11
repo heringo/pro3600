@@ -624,8 +624,25 @@
 
         var layout = {
           paper_bgcolor:'rgba(0,0,0,0)',
-          plot_bgcolor:'rgba(0,0,0,0)'
-    
+          plot_bgcolor:'rgba(0,0,0,0)',
+          xaxis: {
+            title: 'Time',
+            titlefont: {
+              color: 'rgb(220,220,220)' // Couleur de la police de l'axe X
+            },
+            tickfont: {
+              color: 'rgb(220,220,220)' // Couleur de la police des graduations de l'axe X
+            }
+          },
+          yaxis: {
+            title: 'Price ($)',
+            titlefont: {
+              color: 'rgb(220,220,220)' // Couleur de la police de l'axe Y
+            },
+            tickfont: {
+              color: 'rgb(220,220,220)' // Couleur de la police des graduations de l'axe Y
+            }
+          }
         };
 
         var absi = JSON.parse('<?php echo json_encode($fabsi); ?>');
