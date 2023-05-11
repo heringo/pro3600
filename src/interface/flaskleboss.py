@@ -37,7 +37,7 @@ def result():
     start_day_train = '2015-01-01'
     start_day_brownian = '2023-01-01'
     end_day_train = auj
-    end_day_pred = "2023-07-01"
+    end_day_pred = "2023-06-01"
 
     # Période pour laquelle on telecharge tourtes les données jusqu'à aujourdhui
     stock = yf.download(ticker, start_day_train, end_day_train)
