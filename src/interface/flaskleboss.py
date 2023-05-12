@@ -15,9 +15,10 @@ from scipy.stats import norm
 import numpy as np
 import pandas_market_calendars as mcal
 from datetime import timedelta, datetime
-
-# ---------------------------------------------------------------
+import requests
 import datetime
+# ---------------------------------------------------------------
+
 auj = datetime.date.today()
 
 
@@ -33,7 +34,14 @@ def home():
 
 @app.route('/result', methods=['POST'])
 def result():
+    # On vérifie que le ticker existe bien
     ticker = request.form['inputValue']
+    check = yf.Ticker(ticker)
+
+    if check.history().empty:
+        error_message = "Le ticker '{}' n'existe pas.".format(ticker)
+        return render_template('erreur.html', ticker=ticker)
+    # On fixe les dates d'import des données et de prédiction
     start_day_train = '2015-01-01'
     start_day_brownian = '2023-01-01'
     end_day_train = auj
