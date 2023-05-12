@@ -52,17 +52,19 @@ pip install itertools
 - [Plotly-Provides an interactive, open-source, and browser-based graphing library.](https://pypi.org/project/plotly/)
 - [Matplotlib-Provides a comprehensive library for creating static, animated, and interactive visualizations in Python.](https://pypi.org/project/matplotlib/)
 
-License
+## License
 
 No license for now.
 
 ## Background
 
-Work that started on tktinterin 2022 but that has been extended to Javascript, html and php to provide an extensive GUI for financial forecasts to give the user forecasts in minutes hours but also days and weeks
+Work that started on tktinter in 2022 but that has been extended to Javascript, html and php to provide an extensive GUI for financial forecasts to give the user forecasts in minutes hours but also days and weeks
 
 ## Getting Help
 
-For usage questions, the best place to go to is [StackOverflow](https://stackoverflow.com/questions/tagged/pandas). Further, general questions and discussions can also be written to our email adress FiNanCe@gmail.com.
+For usage questions, the best place to go to is [StackOverflow](https://stackoverflow.com/questions). Further, general questions and discussions can also be written to our email adress FiNanCe@gmail.com.
+
+
 
 ## Development
 
