@@ -37,17 +37,16 @@ def result():
     # On vérifie que le ticker existe bien
     ticker = request.form['inputValue']
     check = yf.Ticker(ticker)
-
     if check.history().empty:
         error_message = "Le ticker '{}' n'existe pas.".format(ticker)
         return render_template('erreur.html', ticker=ticker)
     # On fixe les dates d'import des données et de prédiction
     start_day_train = '2015-01-01'
-    start_day_brownian = '2023-01-01'
+    start_day_brownian = auj - datetime.timedelta(days=365)
     end_day_train = auj
-    end_day_pred = "2023-06-01"
+    end_day_pred = auj + datetime.timedelta(days=2*30)
 
-    # Période pour laquelle on telecharge tourtes les données jusqu'à aujourdhui
+    #Fonction du modèle brownien
     stock = yf.download(ticker, start_day_train, end_day_train)
     # Période pour laquelle on telecharge les données d'entrainement
     stock_total = yf.download(ticker, start_day_brownian, end_day_train)
@@ -56,7 +55,6 @@ def result():
     dates_stock_total = nyse.schedule(
         start_date=start_day_brownian, end_date=end_day_pred).index
     dates_pred = [date.strftime('%Y-%m-%d') for date in dates_stock_total]
-###################################################################################
     volatility = math.sqrt(252) * stock['Close'].pct_change(1).std()
     drift = stock["Close"].pct_change().dropna().mean()
     S0 = stock_total["Close"][0]
@@ -83,7 +81,8 @@ def result():
         if mape < min_mape:
             min_mape = mape
             S_plot = S[:, y]
-#########################################################################
+
+    #Formatation des données et écriture dans des fichiers txt
 
     values = stock.iloc[:, 4]
     op = stock.iloc[:, 0]
