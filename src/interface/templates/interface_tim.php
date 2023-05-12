@@ -1625,10 +1625,55 @@
             so.style.color = '#8295B2';
             ema.style.backgroundColor ='rgb(30, 30, 30)';
             ema.style.color = '#8295B2';
+            sim1.style.backgroundColor ='rgb(30, 30, 30)';
+            sim1.style.color = '#8295B2';
             mybrownian();
           } else {
             sim3.style.backgroundColor ='rgb(30, 30, 30)';
             sim3.style.color = '#8295B2';
+            if (cdl) {
+              mycandle();
+            } else {
+              myplot();
+            }
+          }}
+        });
+
+        function myneural() {
+            TESTER = document.getElementById('tester');
+            Plotly.newPlot( TESTER, [{
+            x: filteredDates_neural,
+            y: subneuralprophet,
+            name: 'Neural',
+            line: {color: 'rgb(243, 156, 18)'}
+            },{
+            x: filteredDates,
+            y: subordo,
+            name: 'Stock Price',
+            line: {color: 'rgb(52, 152, 219)'}
+            }], layout);
+        }
+        sim1.addEventListener('click', function() {
+          if (jr) {  
+          if (sim1.style.backgroundColor == 'rgb(30, 30, 30)') {
+            sim1.style.backgroundColor ='#546EE5'
+            sim1.style.color = 'white';
+            bollinger.style.backgroundColor ='rgb(30, 30, 30)';
+            bollinger.style.color = '#8295B2';
+            macd.style.backgroundColor ='rgb(30, 30, 30)';
+            macd.style.color = '#8295B2';
+            rsi.style.backgroundColor ='rgb(30, 30, 30)';
+            rsi.style.color = '#8295B2';
+            so.style.backgroundColor ='rgb(30, 30, 30)';
+            so.style.color = '#8295B2';
+            ema.style.backgroundColor ='rgb(30, 30, 30)';
+            ema.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)';
+            sim3.style.color = '#8295B2';
+            myneural();
+          } else {
+            sim1.style.backgroundColor ='rgb(30, 30, 30)'
+            sim1.style.color = '#8295B2';
             if (cdl) {
               mycandle();
             } else {
