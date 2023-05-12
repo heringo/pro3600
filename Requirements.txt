@@ -1,0 +1,21 @@
+# See that file for comments about the need/usage of each dependency.
+
+“3.7”<=**Python < “3.11”**
+
+pip 
+numpy
+neuralprophet==0.6.0 
+matplotlib>=3.6.1
+pandas
+tables>=3.7.0
+scipy>=1.8.1
+flask
+yfinance
+pandas_datareader
+plotly 
+plotly_resampler
+datetime
+pandas_market_calendars
+subprocess
+typing
+itertools
