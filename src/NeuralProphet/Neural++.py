@@ -28,31 +28,39 @@ yf.pdr_override()
 
 # Minute Forecasting
 # set the appropriate forecast period
-forecast_period = 60
 # Set the end date as today's date
+
+##Minute Forecasting
+
+#Set the appropriate forecast period
+forecast_period=60
+number_of_days=1
 
 # Set the end date as today's date
 end_date = datetime.datetime.now().strftime("%m/%d/%Y")
-# Set the start date as 7 days before the end date
-start_date = (datetime.datetime.now() -
-              datetime.timedelta(days=7)).strftime("%m/%d/%Y")
-# Get the minute data for a specific stock for the last 7 days
-stock_data = si.get_data("AAPL", start_date=start_date,
-                         end_date=end_date, interval="1m")
-# Reformat the data to only include the Date and Close columns
-stock_data = stock_data.reset_index(drop=False)
+ 
+ # Set the start date as 7 days before the end date
+start_date = (datetime.datetime.now() - datetime.timedelta(days=number_of_days)).strftime("%m/%d/%Y")
 
+ # Get the minute data for a specific stock for the last 7 days
+stock_data = si.get_data("SOI.PA", start_date=start_date, end_date=end_date, interval="1m")
+ 
+ # Reformat the data to only include the Date and Close columns
+stock_data = stock_data.reset_index(drop=False)
 stock_data = stock_data[['index', 'close']]
+
 # Rename the columns to match the Prophet API
 stock_data = stock_data.rename(columns={'index': 'ds', 'close': 'y'})
+
 # Convert the Date column to a datetime type
 stock_data['ds'] = pd.to_datetime(stock_data['ds'])
-# Filter the data
-date = stock_data['ds'].max()-datetime.timedelta(minutes=forecast_period)
+
+#Filter the data
+date=stock_data['ds'].max()-datetime.timedelta(minutes=forecast_period)
 stock_data1 = stock_data.loc[stock_data['ds'] < date, ['ds', 'y']]
-# Initialize the model and fit the data
-m = NeuralProphet(changepoints_range=0.90, seasonality_mode='multiplicative',
-                  daily_seasonality=4, ar_reg=0.25, num_hidden_layers=3, d_hidden=64)
+
+#Initialize the model and fit the data
+m=NeuralProphet(changepoints_range=0.95,ar_reg=0.5,num_hidden_layers=5,d_hidden=64)
 m.fit(stock_data1, freq="min")
 future = m.make_future_dataframe(
     stock_data1, periods=forecast_period, n_historic_predictions=len(stock_data))

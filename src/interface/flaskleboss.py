@@ -57,6 +57,7 @@ def result():
     end_day_train = auj
     end_day_pred = auj + datetime.timedelta(days=2*30)
 
+
     #Modèle brownien
     brownian_function = importlib.import_module('brownian_function')
     S_plot,stock,dates_pred = brownian_function.brownian(ticker, start_day_train,end_day_train,start_day_brownian,end_day_pred)
@@ -65,7 +66,6 @@ def result():
     neural_function = importlib.import_module('neural_function')
     neural, neural_dates = neural_function.neural(ticker)
     
-
     #Formatation des données et écriture dans des fichiers txt
 
     values = stock.iloc[:, 4]
