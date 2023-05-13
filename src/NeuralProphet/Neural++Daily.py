@@ -6,7 +6,6 @@ import yfinance as yf
 import matplotlib.pyplot as plt 
 import plotly
 from pandas_datareader import data as pdr
-import yahoo_fin.stock_info as si
 import datetime
 import plotly_resampler
 from dateutil.relativedelta import relativedelta
@@ -41,5 +40,5 @@ def forecastdates(forecast):
     forecast= pd.to_datetime(forecast)
     forecast=forecast.strftime("%Y-%m-%dT%H:%M:%S")
     return forecast
-#print(forecastdates(forecast))
+print(forecastdates(forecast))
 #print(forecastvalues(forecast))

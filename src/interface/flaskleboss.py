@@ -1,22 +1,32 @@
 import yfinance as yf
 from flask import Flask, request, render_template
 import subprocess
-import plotly.offline as pyo
-import plotly.graph_objs as go
+#import plotly.offline as pyo
+#import plotly.graph_objs as go
 from plotly.offline import plot, iplot
 import plotly
 import plotly_resampler as FigureResampler
 import pandas as pd
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import yfinance as yf
 import math
-import scipy
+#import scipy
 from scipy.stats import norm
 import numpy as np
 import pandas_market_calendars as mcal
 from datetime import timedelta, datetime
 import requests
 import datetime
+from neuralprophet import NeuralProphet
+import numpy as np
+import pandas as pd 
+import yfinance as yf
+import matplotlib.pyplot as plt 
+import plotly
+from pandas_datareader import data as pdr
+import datetime
+import plotly_resampler
+from dateutil.relativedelta import relativedelta
 # ---------------------------------------------------------------
 
 auj = datetime.date.today()
@@ -28,7 +38,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     php_output = subprocess.check_output(
-        ['php', './templates/theoleboss.php'])
+        ['php', './templates/interface_tim.php'])
     return php_output
 
 
@@ -46,7 +56,8 @@ def result():
     end_day_train = auj
     end_day_pred = auj + datetime.timedelta(days=2*30)
 
-    #Fonction du modèle brownien
+    #Modèle brownien
+
     stock = yf.download(ticker, start_day_train, end_day_train)
     # Période pour laquelle on telecharge les données d'entrainement
     stock_total = yf.download(ticker, start_day_brownian, end_day_train)
@@ -81,6 +92,53 @@ def result():
         if mape < min_mape:
             min_mape = mape
             S_plot = S[:, y]
+    
+    #Modèle NeuralProphet
+
+    def get_current_date():
+    # Get the current date in the desired format
+        return auj.strftime('%Y-%m-%d')
+
+    def subtract_years(date_str, years):
+        # Convert the date string to a datetime object
+        date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+        # Subtract the specified number of years from the date object
+        new_date_obj = date_obj - datetime.timedelta(days=365*years)
+        # Convert the new date object back to a string and return it
+        return new_date_obj.strftime('%Y-%m-%d')
+    # Override the pandas_datareader
+    yf.pdr_override()
+    #Daily Forecasting
+    #Set the predefined variables
+    forecast_period=60
+    number_of_years=10
+
+    # Set the end date as today's date
+    end_date = get_current_date()
+    ten_years_ago = subtract_years(end_date, 10)
+    # Set the start date as 10 years before the end date
+    start_date = ten_years_ago
+    df = pdr.get_data_yahoo(ticker, start=start_date,end=end_date)
+    df=df.reset_index(drop=False)
+    df=df[['Date','Adj Close']]
+    df['Date']=pd.to_datetime(df['Date'])
+    df=df.rename(columns={'Date':'ds','Adj Close':'y'})
+    df['ds']=pd.to_datetime(df['ds'])
+    df['y']=df['y'].interpolate()
+    m=NeuralProphet()
+    m.fit(df, freq="B")
+    future=m.make_future_dataframe(df, periods=60, n_historic_predictions=len(df))
+    forecast=m.predict(future)
+    def forecastvalues(forecast):
+        forecast = forecast['yhat1'].values
+        return forecast
+    def forecastdates(forecast):
+        forecast = forecast['ds'].values
+        forecast= pd.to_datetime(forecast)
+        forecast=forecast.strftime("%Y-%m-%d")
+        return forecast
+    neural = forecastvalues(forecast)
+    neural_dates = forecastdates(forecast)
 
     #Formatation des données et écriture dans des fichiers txt
 
@@ -122,6 +180,7 @@ def result():
     ordo = open("./templates/ordo.txt", "w")
     absi = open("./templates/absi.txt", "w")
     absi_pred = open("./templates/absi_pred.txt", "w")
+    absi_neural = open("./templates/absi_neural.txt", "w")
     ope = open("./templates/open.txt", "w")
     close = open("./templates/close.txt", "w")
     low = open("./templates/low.txt", "w")
@@ -136,6 +195,9 @@ def result():
     fastso = open("./templates/fastso.txt", "w")
     slowso = open("./templates/slowso.txt", "w")
     brownian = open("./templates/brownian.txt", "w")
+    neuralprophet = open("./templates/neuralprophet.txt", "w")
+    for i in range(len(neural_dates)):
+        absi_neural.write(neural_dates[i]+'\n')
     for i in range(len(dates_pred)):
         absi_pred.write(dates_pred[i]+'\n')
     for i in range(len(values)):
@@ -156,6 +218,9 @@ def result():
         if i < S_plot.size:
             newbrownian = str(S_plot[i])
             brownian.write(newbrownian+'\n')
+        if i < neural.size:
+            newneural = str(neural[i])
+            neuralprophet.write(newneural+'\n')
         newa = str(date[i]).split()[0]
         ordo.write(newo+'\n')
         ope.write(newop+'\n')
@@ -189,8 +254,10 @@ def result():
     fastso.close()
     slowso.close()
     brownian.close()
+    neuralprophet.close()
+    absi_neural.close()
     php_output = subprocess.check_output(
-        ['php', './templates/theoleboss.php'])
+        ['php', './templates/interface_tim.php'])
     return php_output
 
 

@@ -603,6 +603,8 @@
         $fslowso = file("./templates/slowso.txt", FILE_IGNORE_NEW_LINES);
         $fbrownian = file("./templates/brownian.txt", FILE_IGNORE_NEW_LINES);
         $fabsi_pred = file("./templates/absi_pred.txt", FILE_IGNORE_NEW_LINES);
+        $fneuralprophet = file("./templates/neuralprophet.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi_neural = file("./templates/absi_neural.txt", FILE_IGNORE_NEW_LINES);
     ?>
     <script>
         var candle = document.getElementById("candle");
@@ -662,6 +664,8 @@
         var slows = JSON.parse('<?php echo json_encode($fslowso); ?>');
         var brownian = JSON.parse('<?php echo json_encode($fbrownian); ?>');
         var absi_pred = JSON.parse('<?php echo json_encode($fabsi_pred); ?>');
+        var neuralprophet = JSON.parse('<?php echo json_encode($fneuralprophet); ?>');
+        var absi_neural = JSON.parse('<?php echo json_encode($fabsi_neural); ?>');
 
         let intordo = ordo.map(parseFloat);
         let intopen = ope.map(parseFloat);
@@ -678,10 +682,14 @@
         let intfastso = fasts.map(parseFloat);
         let intslowso = slows.map(parseFloat);
         let intbrownian = brownian.map(parseFloat);
+        let intneuralprophet = neuralprophet.map(parseFloat);
         let dabsi = absi.map(function(dateString) {
           return new Date(dateString);
         });
         let dabsi_pred = absi_pred.map(function(dateString) {
+          return new Date(dateString);
+        });
+        let dabsi_neural = absi_neural.map(function(dateString) {
           return new Date(dateString);
         });
         var cdl = false;
@@ -695,6 +703,10 @@
             return (nDate >= newdate && nDate <= currentDate);
           });
           window.filteredDates_pred = dabsi_pred.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate >= newdate);
+          });
+          window.filteredDates_neural = dabsi_neural.filter(function(date) {
             let nDate = new Date(date);
             return (nDate >= newdate);
           });
@@ -713,6 +725,7 @@
           window.subfastso = intfastso.slice(-filteredDates.length-1, -1);
           window.subslowso = intslowso.slice(-filteredDates.length-1, -1);
           window.subbrownian = intbrownian.slice(-filteredDates_pred.length-1, -1);
+          window.subneuralprophet = intneuralprophet.slice(-filteredDates_neural.length-1, -1);
         }
         myFunctionD(30);
         console.log(filteredDates)
@@ -1235,10 +1248,55 @@
             so.style.color = '#8295B2';
             ema.style.backgroundColor ='rgb(30, 30, 30)';
             ema.style.color = '#8295B2';
+            sim1.style.backgroundColor ='rgb(30, 30, 30)';
+            sim1.style.color = '#8295B2';
             mybrownian();
           } else {
             sim3.style.backgroundColor ='rgb(30, 30, 30)'
             sim3.style.color = '#8295B2';
+            if (cdl) {
+              mycandle();
+            } else {
+              myplot();
+            }
+          }
+        });
+        ///////////////////////////////////////////////////////////
+        function myneural() {
+            TESTER = document.getElementById('tester');
+            Plotly.newPlot( TESTER, [{
+            x: filteredDates_neural,
+            y: subneuralprophet,
+            name: 'Neural',
+            line: {color: 'rgb(243, 156, 18)'}
+            },{
+            x: filteredDates,
+            y: subordo,
+            name: 'Stock Price',
+            line: {color: 'rgb(52, 152, 219)'}
+            }], layout);
+        }
+
+        sim1.addEventListener('click', function() {
+          if (sim1.style.backgroundColor == 'rgb(30, 30, 30)') {
+            sim1.style.backgroundColor ='#546EE5'
+            sim1.style.color = 'white';
+            bollinger.style.backgroundColor ='rgb(30, 30, 30)';
+            bollinger.style.color = '#8295B2';
+            macd.style.backgroundColor ='rgb(30, 30, 30)';
+            macd.style.color = '#8295B2';
+            rsi.style.backgroundColor ='rgb(30, 30, 30)';
+            rsi.style.color = '#8295B2';
+            so.style.backgroundColor ='rgb(30, 30, 30)';
+            so.style.color = '#8295B2';
+            ema.style.backgroundColor ='rgb(30, 30, 30)';
+            ema.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)';
+            sim3.style.color = '#8295B2';
+            myneural();
+          } else {
+            sim1.style.backgroundColor ='rgb(30, 30, 30)'
+            sim1.style.color = '#8295B2';
             if (cdl) {
               mycandle();
             } else {
