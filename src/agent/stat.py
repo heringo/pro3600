@@ -3,23 +3,53 @@
 import math
 import yfinance as yf
 
+def get_cac40_closing_prices():
+    # Créer un objet Ticker pour le CAC40
+    cac40 = yf.Ticker('^FCHI')
+    
+    # Récupérer l'historique des prix de clôture sur une période d'un an
+    history = cac40.history(period='1y')
+    
+    # Extraire les prix de clôture et les dates
+    closing_prices = history['Close'].tolist()
+    dates = history.index.tolist()
+    
+    # Créer une liste des prix de clôture avec leurs dates correspondantes
+    prices_with_dates = list(zip(dates, closing_prices))
+    
+    return prices_with_dates
 
+# Appel de la fonction pour récupérer les prix de clôture du CAC40 sur un an
+c_a_c = get_cac40_closing_prices()
+
+#print(c_a_c)
+print(c_a_c[1][1])
+# Affichage des prix de clôture
+#for date, price in cac40_prices:
+#    print(f"Date: {date}, Prix de clôture: {price}")
+#
+#
 #Extract data from the file
-with open("CAC40-cours-journalier-ôclture.txt") as f:
-    c_a_c = []
-    for line in f:
-        date, value = line.split()
-        c_a_c.append(float(value))
+#with open("CAC40-cours-journalier-ôclture.txt") as f:
+#    c_a_c = []
+#    for line in f:
+#        date, value = line.split()
+#        c_a_c.append(float(value))
 
 #Operation for daily yield and average daily yield 
 r = []
 for i in range(1, len(c_a_c)):
-    r.append(math.log(c_a_c[i] / c_a_c[i - 1]))
-    
+    r.append(math.log(c_a_c[i][1] / c_a_c[i - 1][1]))
+
 T = len(r)
 rb = sum(r) / T 
 print("T", T)
 print("rb", rb)
+
+#Operation for average absolute yield
+absr_m_rb = [abs(x) for x in r]
+average_absr_m_rb = sum(absr_m_rb) / T
+print("average_absr_m_rb", average_absr_m_rb)
 
 #Operation for min and max daily yield
 min_r = min(r)
@@ -60,8 +90,3 @@ rho_1 = sum([x * y for x, y in zip(r_m_rb[1:], r_m_rb)]) / s2
 rho_10 = sum([x * y for x, y in zip(r_m_rb[10:], r_m_rb)]) / s2
 print("rho_1", rho_1)
 print("rho_10", rho_10)
-
-#Operation for average absolute yield
-absr_m_rb = [abs(x) for x in r]
-average_absr_m_rb = sum(absr_m_rb) / T
-print("average_absr_m_rb", average_absr_m_rb)

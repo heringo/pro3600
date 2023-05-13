@@ -22,6 +22,10 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 
+import datetime
+
+AUJ = datetime.date.today()
+
 # Constants
 NR_STATS = 7
 NR_PARAMS = 4
@@ -124,9 +128,9 @@ def compute_autocorrelation_squares(x, lag):
     return np.dot(centered_squares[:length], centered_squares[lag:]) / s2
 
 # This function returns the returns from the prices read into the file.
-def get_returns():
+def get_returns(ticker):
     # Define the ticker list
-    tickers_list = '^FCHI'
+    tickers_list = ticker
 
     # Extract the necessary data
     start_day = "2022-01-01"
@@ -323,12 +327,46 @@ class Functor(BaseFunctor):
         
         print(self.Price)
         
+        
+        
         if self.txt :
+            
+            # Création d'une liste pour stocker les heures
+            heures = []
+
+            # Définition de l'heure de départ
+            heure = 13
+            minute = 30
+
+            # Boucle pour générer les heures jusqu'à 20h
+            while heure < 20:
+                # Ajout de l'heure actuelle à la liste
+                heures.append(f"{heure:02d}:{minute:02d}:00")
+    
+                # Incrément des minutes de 5
+                minute += 5
+    
+                # Vérification et ajustement des heures et minutes si nécessaire
+                if minute >= 60:
+                    minute = 0
+                    heure += 1
+
+            # Écriture des heures dans un fichier texte
+            with open("heures.txt", "w") as fichier:
+                for heure in heures:
+                    fichier.write(heure + "\n")
+
+            
             filename = "PredictionAgent.txt"
             with open(filename, "a") as f:
                 for i in range(len(self.Price)):
                     f.write(f'{self.Price[i]}\n')
             self.txt = 0
+            
+            filename = "PredictionHeure"
+            with open(filename, "a") as f:
+                for i in range(250):
+                    f.write(f'{AUJ}TT13:54:00')
             
             # filename = "PredictionAgentAbscisse.txt"
             # with open(filename, "a") as f:
@@ -364,10 +402,10 @@ class Estimation:
         #    f.write("\t".join(map(str, lm.x.flatten())) + "\n")
 
 
-def main():
+def main(ticker):
 
     rng = np.random.default_rng()
-    returns = get_returns()
+    returns = get_returns(ticker)
     M = np.zeros((R, NR_STATS))         #matrice de R lignes et 7 colonnes de statistiques (sigma, kurtosis ...)
 
     #effectue R simulations échantillons bootstrap dont on calcules les paramètres statistiques
