@@ -27,6 +27,7 @@ from pandas_datareader import data as pdr
 import datetime
 import plotly_resampler
 from dateutil.relativedelta import relativedelta
+import importlib
 # ---------------------------------------------------------------
 
 auj = datetime.date.today()
@@ -57,88 +58,13 @@ def result():
     end_day_pred = auj + datetime.timedelta(days=2*30)
 
     #Modèle brownien
-
-    stock = yf.download(ticker, start_day_train, end_day_train)
-    # Période pour laquelle on telecharge les données d'entrainement
-    stock_total = yf.download(ticker, start_day_brownian, end_day_train)
-    # Pour avoir les dates futures d'ouverture du marché
-    nyse = mcal.get_calendar('NYSE')
-    dates_stock_total = nyse.schedule(
-        start_date=start_day_brownian, end_date=end_day_pred).index
-    dates_pred = [date.strftime('%Y-%m-%d') for date in dates_stock_total]
-    volatility = math.sqrt(252) * stock['Close'].pct_change(1).std()
-    drift = stock["Close"].pct_change().dropna().mean()
-    S0 = stock_total["Close"][0]
-    sigma = volatility
-    mu = drift
-    T = 1
-    N_train = stock_total["Close"].size
-    N_total = len(dates_pred)
-    deltat = T/N_train
-    i = 10000
-    S = np.zeros([N_total, i])
-
-    for y in range(0, i):
-        S[0, y] = S0
-        for x in range(0, N_total - 1):
-            S[x+1, y] = S[x, y]*(np.exp((mu-(sigma**2)/2)*deltat +
-                                        sigma*np.random.normal(0, np.sqrt(deltat))))
-
-    min_mape = np.mean(np.abs(
-        (stock_total["Close"] - S[0:N_train, 0])/stock_total["Close"]))*100
-    for y in range(1, i):
-        mape = np.mean(np.abs(
-            (stock_total["Close"] - S[0:N_train, y])/stock_total["Close"]))*100
-        if mape < min_mape:
-            min_mape = mape
-            S_plot = S[:, y]
+    brownian_function = importlib.import_module('brownian_function')
+    S_plot,stock,dates_pred = brownian_function.brownian(ticker, start_day_train,end_day_train,start_day_brownian,end_day_pred)
     
     #Modèle NeuralProphet
-
-    def get_current_date():
-    # Get the current date in the desired format
-        return auj.strftime('%Y-%m-%d')
-
-    def subtract_years(date_str, years):
-        # Convert the date string to a datetime object
-        date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
-        # Subtract the specified number of years from the date object
-        new_date_obj = date_obj - datetime.timedelta(days=365*years)
-        # Convert the new date object back to a string and return it
-        return new_date_obj.strftime('%Y-%m-%d')
-    # Override the pandas_datareader
-    yf.pdr_override()
-    #Daily Forecasting
-    #Set the predefined variables
-    forecast_period=60
-    number_of_years=10
-
-    # Set the end date as today's date
-    end_date = get_current_date()
-    ten_years_ago = subtract_years(end_date, 10)
-    # Set the start date as 10 years before the end date
-    start_date = ten_years_ago
-    df = pdr.get_data_yahoo(ticker, start=start_date,end=end_date)
-    df=df.reset_index(drop=False)
-    df=df[['Date','Adj Close']]
-    df['Date']=pd.to_datetime(df['Date'])
-    df=df.rename(columns={'Date':'ds','Adj Close':'y'})
-    df['ds']=pd.to_datetime(df['ds'])
-    df['y']=df['y'].interpolate()
-    m=NeuralProphet()
-    m.fit(df, freq="B")
-    future=m.make_future_dataframe(df, periods=60, n_historic_predictions=len(df))
-    forecast=m.predict(future)
-    def forecastvalues(forecast):
-        forecast = forecast['yhat1'].values
-        return forecast
-    def forecastdates(forecast):
-        forecast = forecast['ds'].values
-        forecast= pd.to_datetime(forecast)
-        forecast=forecast.strftime("%Y-%m-%d")
-        return forecast
-    neural = forecastvalues(forecast)
-    neural_dates = forecastdates(forecast)
+    neural_function = importlib.import_module('neural_function')
+    neural, neural_dates = neural_function.neural(ticker)
+    
 
     #Formatation des données et écriture dans des fichiers txt
 
