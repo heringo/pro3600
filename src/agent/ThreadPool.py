@@ -3,8 +3,6 @@ from queue import Queue
 import time
 
 
-
-#Les thresads sont des processus légers qui permettent d'exécuter des tâches en parallèle.
 class ThreadPool:
     """ Thresads are lightweight processes that allow you to run tasks in parallel.
     
@@ -26,7 +24,6 @@ class ThreadPool:
         
     Methods
     -------
-
     __del__():
         Desctuctor called when the object is destroyed
     
@@ -39,6 +36,7 @@ class ThreadPool:
         life coordinates to their graph representation.
   
     """
+    
     
     def __init__(self) -> None:
         """ Init creates nr_threads and launches them
