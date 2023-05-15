@@ -1,6 +1,5 @@
 import datetime
 import numpy as np
-import statistics as stat
 from concurrent.futures import ThreadPoolExecutor
 
 from compute_stat import *
