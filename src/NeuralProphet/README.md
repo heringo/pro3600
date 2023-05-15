@@ -40,7 +40,7 @@ pip install datetime
 
 ## How to use it ?
 
-Choose your ticker on [main.py](http://main.py/) and run [main.py](http://main.py/)
+Choose your ticker, your forecast_period, and the number of years you want the model to be trained on,  on [main.py](http://main.py/) and run [main.py](http://main.py/)
 
 '''python
 python3 [main.py](http://main.py/)
