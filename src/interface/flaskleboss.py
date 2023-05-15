@@ -24,10 +24,10 @@ import yfinance as yf
 import matplotlib.pyplot as plt 
 import plotly
 from pandas_datareader import data as pdr
-import datetime
 import plotly_resampler
 from dateutil.relativedelta import relativedelta
 import importlib
+from yahoo_fin import stock_info as si
 # ---------------------------------------------------------------
 
 auj = datetime.date.today()
@@ -65,6 +65,10 @@ def result():
     #Modèle NeuralProphet
     neural_function = importlib.import_module('neural_function')
     neural, neural_dates = neural_function.neural(ticker)
+
+    #Modèle Agent
+    agent_function = importlib.import_module('agent_function')
+    agent_function.main(ticker)
     
     #Formatation des données et écriture dans des fichiers txt
 
@@ -182,6 +186,49 @@ def result():
     brownian.close()
     neuralprophet.close()
     absi_neural.close()
+
+    absi = open("./templates/rabsi.txt", "w")
+    ope = open("./templates/ropen.txt", "w")
+    close = open("./templates/rclose.txt", "w")
+    low = open("./templates/rlow.txt", "w")
+    high = open("./templates/rhigh.txt", "w")
+    '''for i in range(5) :
+        deb=fin - datetime.timedelta(days=4)
+        stock_data = si.get_data(ticker, start_date=deb, end_date=fin, interval='1m')
+        L.append(stock_data)
+        fin=deb - datetime.timedelta(days=1)'''
+    stock_data = si.get_data(ticker, start_date=auj - datetime.timedelta(days=3), end_date=auj, interval='1m')
+    L=[]
+    L.append(stock_data)
+    IL = L[::-1]
+    stock_total = pd.concat(IL)
+    op = stock_total.iloc[:,0]
+    hi = stock_total.iloc[:,1]
+    lo = stock_total.iloc[:,2]
+    cl = stock_total.iloc[:,3]
+    op=op.interpolate()
+    hi=hi.interpolate()
+    lo=lo.interpolate()
+    cl=cl.interpolate()
+    date = stock_total.index[0:len(op)]
+
+    for i in range(len(op)) :
+        newop=str(op[i])
+        newhi=str(hi[i])
+        newlo=str(lo[i])
+        newcl=str(cl[i])
+        newa=str(date[i]).split()[0]+'T'+str(date[i]).split()[1]
+        ope.write(newop+'\n')
+        close.write(newcl+'\n')
+        low.write(newlo+'\n')
+        high.write(newhi+'\n')
+        absi.write(newa+'\n')
+    ope.close()
+    high.close()
+    low.close()
+    close.close()
+    absi.close()
+
     php_output = subprocess.check_output(
         ['php', './templates/interface_tim.php'])
     return php_output
