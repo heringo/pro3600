@@ -11,7 +11,7 @@ In our case we used NeuralProphet from Facebook to evaluate the stock market pri
 
 For further explanation on the Neural prophet model please visit the NeuralProphet paper : [NeuralPaper](https://arxiv.org/pdf/2111.15397.pdf). 
 
-In the specific context of modeling stock prices, NeuralProphet can be used to estimate the price dynamics of financial assets such as stocks. The additive components Trend,Seasonality,Events , AutoRegression correlated with a neural network ( that tries to learn the patterns of the stock )make an estimation of the prices and try to forecast them in the future.
+In the specific context of modeling stock prices, NeuralProphet can be used to estimate the price dynamics of financial assets such as stocks. The additive components Trend, Seasonality, Events, AutoRegression correlated with a neural network (that tries to learn the patterns of the stock)make an estimation of the prices and try to forecast them in the future.
 
 Furthermore, the NeuralProphet model allows for exploring many features to modify the models according to your needs. The main complexity is finding the hyperparameters that will fit the best the stock. Accuracy can vary from a stock to another, we would need to study more deeply the volatility to provide for better and more accurate models as prices aren’t the only features in financial markets.
 
