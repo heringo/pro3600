@@ -4,9 +4,10 @@ In finance, **neuralnetworks modeling (NNM)** is an approach that allows modelin
 
 In our case we used NeuralProphet from Facebook to evaluate the stock market prices by finding the solution of a ‘fitting the curve problem’ with this equation representing yhat the forecast of y the stock market prices :
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/027a255e-1b69-4109-b2b6-9f4e7ea351a9/Untitled.png)
+<img width="967" alt="image" src="https://github.com/heringo/pro3600/assets/121232962/e2f56741-ebc1-4518-a4b4-ca70259477c4">
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2daa2282-286c-43a6-97e9-f5f1baac204d/Untitled.png)
+<img width="1008" alt="image" src="https://github.com/heringo/pro3600/assets/121232962/fa9e61dd-6310-4b7e-b08c-b35986017ae6">
+
 
 For further explanation on the Neural prophet model please visit the NeuralProphet paper : [NeuralPaper](https://arxiv.org/pdf/2111.15397.pdf). 
 
