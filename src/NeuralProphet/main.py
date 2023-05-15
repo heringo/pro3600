@@ -84,7 +84,7 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
     
     #plot.plotting(m,forecast).show()
 
-    #Get the correct format to file into .txt the values and the dates of the forecast
+    #Get the values and the dates of the forecast into the correct format for putting them in a .txt afterwards
     forecast_list_and_dates.forecastdates(forecast)
     forecast_list_and_dates.forecastvalues(forecast)
 
