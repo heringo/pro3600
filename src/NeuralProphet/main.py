@@ -80,9 +80,9 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
     forecast=m.predict(future)
     
 
-    #If you want to plot the data launch this :
+    #If you want to plot unhashtag the following :
     
-    plot.plotting(m,forecast).show()
+    #plot.plotting(m,forecast).show()
 
     #Get the correct format to file into .txt the values and the dates of the forecast
     forecast_list_and_dates.forecastdates(forecast)
