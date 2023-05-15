@@ -65,18 +65,21 @@ class Estimation:
     def __init__(self, 
                  r: int, 
                  M: Iterable[Iterable[float]], 
-                 beta0: Tuple[float,float,float]) -> None:
+                 beta0: Tuple[float,float,float],
+                 lastprice: float) -> None:
         """Uses transpose to have a column of rth stats
 
         Args:
             r (int): number of line r (line of stats)
             M (Iterable[Iterable[float]]): Array of stats
             beta0 (Tuple[float,float,float]): beta value to start minimizing
+            lastprice (float): last price with yfinance of ticker
+            
         """
         self.r = r
         self.stats = np.transpose(M[r])
         self.beta = beta0
-        self.Price = 0 
+        self.lastprice = lastprice 
         print(self.r, "constructed...")
         #print(self.stats)
 
@@ -86,7 +89,7 @@ class Estimation:
             beta = [beta_macroeconomic, beta_neighborhood, beta_idiosyncratic]
         """
         print("Task", self.r, "starts...")
-        lm = least_squares(Functor(self.stats), self.beta, method='trf')
+        lm = least_squares(Functor(self.stats, self.lastprice), self.beta, method='trf')
         ret = lm.status
         print("Task", self.r, "completes...")
         

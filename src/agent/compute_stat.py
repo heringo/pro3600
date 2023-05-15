@@ -5,6 +5,9 @@ import statistics as stat
 import yfinance as yf
 import math
 
+import datetime
+
+AUJ = datetime.date.today()
 
 def centered(x: Iterable[float]) -> Iterable[float]:
     """ This function returns the vector x appropriately centered.
@@ -99,7 +102,7 @@ def get_returns(ticker: str) -> Iterable[float]:
 
     # Extract the necessary data
     start_day = "2022-01-01"
-    end_day = "2023-01-01"
+    end_day = f"{AUJ}"
 
     tickerData = yf.Ticker(tickers_list)
     tickerDf = tickerData.history(period='1d', start=start_day, end=end_day)

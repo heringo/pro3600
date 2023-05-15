@@ -4,7 +4,7 @@ import time
 
 
 class ThreadPool:
-    """ Thresads are lightweight processes that allow you to run tasks in parallel.
+    """ Thresds are lightweight processes that allow you to run tasks in parallel.
     
     
     Attributes
