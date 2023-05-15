@@ -13,9 +13,9 @@ For further explanation on the Neural prophet model please visit the NeuralProph
 
 In the specific context of modeling stock prices, NeuralProphet can be used to estimate the price dynamics of financial assets such as stocks. The additive components Trend, Seasonality, Events, AutoRegression correlated with a neural network (that tries to learn the patterns of the stock)make an estimation of the prices and try to forecast them in the future.
 
-Furthermore, the NeuralProphet model allows for exploring many features to modify the models according to your needs. The main complexity is finding the hyperparameters that will fit the best the stock. Accuracy can vary from a stock to another, we would need to study more deeply the volatility to provide for better and more accurate models as prices aren’t the only features in financial markets.
+Furthermore, the NeuralProphet model allows for exploring many features to modify the model according to your needs. The main complexity is finding the hyperparameters that will make the best fit for the stock market. Accuracy can vary from a stock to another and we would need to study more deeply the volatility to provide for better and more accurate models as prices aren’t the only features in financial markets.
 
-It is important to note that the NeuralProphet model  is a simplified version of reality and rely on specific assumptions and parameters(does not take into account the events unless told and relies on the constant feeding of information). The results obtained from these models can provide useful insights and perspectives on variations in stock prices, but they do not represent a precise prediction of the actual market.
+It is important to note that the NeuralProphet model is a simplified version of reality and rely on specific assumptions and parameters(does not take into account the events unless told and relies on the constant feeding of information). The results obtained from these models can provide useful insights and perspectives on variations in stock prices, but they do not represent a precise prediction of the actual market.
 
 ## Where to get it ?
 
