@@ -64,7 +64,7 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
 
     #Instantiate the model with parameters
 
-    m=NeuralProphet(changepoints_range=0.98,n_changepoints=30,batch_size=128,epochs=150,)
+    m=NeuralProphet(changepoints_range=0.98,n_changepoints=30,batch_size=128,epochs=150)
 
     #Fitting the model
 
