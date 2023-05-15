@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Ma page de test</title>
     <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+    <script src="https://unpkg.com/rss-parser/dist/rss-parser.min.js"></script>
     <style>
       #candle {
         position: absolute;
@@ -691,6 +692,9 @@
         $frlow = file("./templates/rlow.txt", FILE_IGNORE_NEW_LINES);
         $fneuralprophet = file("./templates/neuralprophet.txt", FILE_IGNORE_NEW_LINES);
         $fabsi_neural = file("./templates/absi_neural.txt", FILE_IGNORE_NEW_LINES);
+        $fagent = file("./templates/PredictionAgent.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi_agent = file("./templates/PredictionHeure.txt", FILE_IGNORE_NEW_LINES);
+
     ?>
     <script>
         var candle = document.getElementById("candle");
@@ -748,6 +752,8 @@
         var rlow = JSON.parse('<?php echo json_encode($frlow); ?>');
         var neuralprophet = JSON.parse('<?php echo json_encode($fneuralprophet); ?>');
         var absi_neural = JSON.parse('<?php echo json_encode($fabsi_neural); ?>');
+        var agent = JSON.parse('<?php echo json_encode($fagent); ?>');
+        var absi_agent = JSON.parse('<?php echo json_encode($fabsi_agent); ?>');
 
         let intordo = ordo.map(parseFloat);
         let intopen = ope.map(parseFloat);
@@ -765,6 +771,7 @@
         let intslowso = slows.map(parseFloat);
         let intbrownian = brownian.map(parseFloat);
         let intneuralprophet = neuralprophet.map(parseFloat);
+        let intagent = agent.map(parseFloat);
         let dabsi = absi.map(function(dateString) {
           return new Date(dateString);
         });
@@ -772,6 +779,9 @@
           return new Date(dateString);
         });
         let dabsi_neural = absi_neural.map(function(dateString) {
+          return new Date(dateString);
+        });
+        let dabsi_agent = absi_agent.map(function(dateString) {
           return new Date(dateString);
         });
         let intropen = rope.map(parseFloat);
@@ -835,13 +845,15 @@
           return rangebreaker;
         }
 
-        function mynewFunction(x) {
+        function myFunctionM(x) {
           window.filteredDates = drabsi.slice(-x*60-1, -1);
           window.subopen = intropen.slice(-filteredDates.length-1, -1);
           window.subclose = intrclose.slice(-filteredDates.length-1, -1);
           window.subhigh = intrhigh.slice(-filteredDates.length-1, -1);
           window.sublow = intrlow.slice(-filteredDates.length-1, -1);
           window.subordo = subclose;
+          //window.subagent = intagent.slice(-filteredDates_agent.length-1, -1);
+          window.config = { displayModeBar: false };
           window.layout = {
             paper_bgcolor:'rgba(0,0,0,0)',
             plot_bgcolor:'rgba(0,0,0,0)',
@@ -900,6 +912,7 @@
           window.subslowso = intslowso.slice(-filteredDates.length-1, -1);
           window.subbrownian = intbrownian.slice(-filteredDates_pred.length-1, -1);
           window.subneuralprophet = intneuralprophet.slice(-filteredDates_neural.length-1, -1);
+          window.config = { displayModeBar: false };
           window.layout = {
             paper_bgcolor:'rgba(0,0,0,0)',
             plot_bgcolor:'rgba(0,0,0,0)',
@@ -923,7 +936,12 @@
             }
           };
         }
-        myFunctionD(7);
+        
+        myFunctionD(7)
+
+        console.log(subordo)
+        console.log(filteredDates)
+        
 ////////////////////////////////////////////////////////////////////////////
       
         function mycandle() {
@@ -933,7 +951,7 @@
             open: subopen,
             high: subhigh,
             close: subclose,
-            low: sublow, type: 'candlestick'}], layout);
+            low: sublow, type: 'candlestick'}], layout, config);
         }
 
         candle.addEventListener('click', function() {
@@ -994,10 +1012,10 @@
           rsi.style.color = '#8295B2';
           so.style.backgroundColor ='rgb(30, 30, 30)';
           so.style.color = '#8295B2';
-          if (zm==0) {mynewFunction(1);}
-          else if (zm==1) {mynewFunction(6);}
-          else if (zm==2) {mynewFunction(12);}
-          else if (zm==3) {mynewFunction(24);}
+          if (zm==0) {myFunctionM(1);}
+          else if (zm==1) {myFunctionM(6);}
+          else if (zm==2) {myFunctionM(12);}
+          else if (zm==3) {myFunctionM(24);}
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -1009,7 +1027,7 @@
           x: filteredDates,
           y: subordo,
           line: {color: 'rgb(52, 152, 219)'}
-          }], layout);
+          }], layout,config);
         }
 
         classic.addEventListener('click', function() {
@@ -1109,7 +1127,7 @@
             sim2.style.color = '#8295B2';
           }
           if (jr) {myFunctionD(7);}
-          else {mynewFunction(1);}
+          else {myFunctionM(1);}
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -1145,7 +1163,7 @@
             sim2.style.color = '#8295B2';
           }
           if (jr) {myFunctionD(31);}
-          else {mynewFunction(6);}
+          else {myFunctionM(6);}
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -1181,7 +1199,7 @@
             sim2.style.color = '#8295B2';
           }
           if (jr) {myFunctionD(61);}
-          else {mynewFunction(12);}
+          else {myFunctionM(12);}
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -1217,7 +1235,7 @@
             sim2.style.color = '#8295B2';
           }
           if (jr) {myFunctionD(3*61);}
-          else {mynewFunction(24);}
+          else {myFunctionM(24);}
           if (cdl) {
             mycandle();
           } else {myplot();}
@@ -1281,7 +1299,7 @@
             open: subopen,
             high: subhigh,
             close: subclose,
-            low: sublow, type: 'candlestick'}], layout);
+            low: sublow, type: 'candlestick'}], layout, config);
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1294,7 +1312,7 @@
             y: subordo,
             name: 'Stock Price',
             line: {color: 'rgb(52, 152, 219)'}
-            }], layout);
+            }], layout,config);
           }
         }
 
@@ -1348,7 +1366,7 @@
                 open: subopen,
                 high: subhigh,
                 close: subclose,
-                low: sublow, type: 'candlestick'}], layout);
+                low: sublow, type: 'candlestick'}], layout,config);
             } else {
                 TESTER = document.getElementById('tester');
                 Plotly.newPlot( TESTER, [{
@@ -1365,7 +1383,7 @@
                 x: filteredDates,
                 y: subordo,
                 name: 'Stock Price',
-                line: {color: 'rgb(52, 152, 219)'}}], layout);
+                line: {color: 'rgb(52, 152, 219)'}}], layout, config);
             }
         } 
 
@@ -1414,7 +1432,7 @@
             open: subopen,
             high: subhigh,
             close: subclose,
-            low: sublow, type: 'candlestick'}], layout);
+            low: sublow, type: 'candlestick'}], layout, config);
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1426,7 +1444,7 @@
             x: filteredDates,
             y: subordo,
             name: 'Stock Price',
-            line: {color: 'rgb(52, 152, 219)'} }], layout);
+            line: {color: 'rgb(52, 152, 219)'} }], layout, config);
           }
         }
 
@@ -1478,7 +1496,7 @@
               y: subhist,
               name: 'Difference',
               type:'bar'
-            }], layout);
+            }], layout, config);
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1493,7 +1511,7 @@
             x: filteredDates,
             y: subhist,
             name: 'Difference',
-            type:'bar'}], layout,{displayModeBar: false});
+            type:'bar'}], layout,config);
           }
         }
 
@@ -1573,7 +1591,7 @@
               color: 'rgb(243, 58, 18)',
               width: 4
             }
-            }], layout);
+            }], layout,config);
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1607,7 +1625,7 @@
               color: 'rgb(243, 58, 18)',
               width: 4
             }
-            }], layout);
+            }], layout,config);
           }
         }
 
@@ -1655,7 +1673,7 @@
             y: subordo,
             name: 'Stock Price',
             line: {color: 'rgb(52, 152, 219)'}
-            }], layout);
+            }], layout, config);
         }
 
         sim3.addEventListener('click', function() {
@@ -1687,6 +1705,42 @@
           }}
         });
 
+        function myagent() {
+            TESTER = document.getElementById('tester');
+            Plotly.newPlot( TESTER, [{
+            x: dabsi_agent,
+            y: intagent,
+            name: 'Agent',
+            line: {color: 'rgb(243, 156, 18)'}
+            }], layout,config);
+        }
+        sim2.addEventListener('click', function() {
+          if (!jr) {  
+          if (sim2.style.backgroundColor == 'rgb(30, 30, 30)') {
+            sim2.style.backgroundColor ='#546EE5'
+            sim2.style.color = 'white';
+            bollinger.style.backgroundColor ='rgb(30, 30, 30)';
+            bollinger.style.color = '#8295B2';
+            macd.style.backgroundColor ='rgb(30, 30, 30)';
+            macd.style.color = '#8295B2';
+            rsi.style.backgroundColor ='rgb(30, 30, 30)';
+            rsi.style.color = '#8295B2';
+            so.style.backgroundColor ='rgb(30, 30, 30)';
+            so.style.color = '#8295B2';
+            ema.style.backgroundColor ='rgb(30, 30, 30)';
+            ema.style.color = '#8295B2';
+            myagent();
+          } else {
+            sim2.style.backgroundColor ='rgb(30, 30, 30)'
+            sim2.style.color = '#8295B2';
+            if (cdl) {
+              mycandle();
+            } else {
+              myplot();
+            }
+          }}
+        });
+
         function myneural() {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1699,7 +1753,7 @@
             y: subordo,
             name: 'Stock Price',
             line: {color: 'rgb(52, 152, 219)'}
-            }], layout);
+            }], layout,config);
         }
         sim1.addEventListener('click', function() {
           if (jr) {  
