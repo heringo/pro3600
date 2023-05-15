@@ -2,7 +2,7 @@
 
 In finance, **neuralnetworks modeling (NNM)** is an approach that allows modeling and simulating financial markets using CNN (**ConvolutionalNeuralNetwork)**. CNNs use a mathematical operation called [convolution](https://en.wikipedia.org/wiki/Convolution) in place of general matrix multiplication in at least one of their layers. When adding an LSTM(LongShortTermMemory) layer, the neural network becomes more apt at forecasting time series data like the stock market which are non-linear. 
 
-In our case we used NeuralProphet from Facebook to evaluate the stock market prices by finding the solution of a ‘fitting the curve problem’ with this equation representing yhat the forecast of y the stock market prices :
+In our case we used NeuralProphet from Facebook to evaluate the stock market prices by finding the solution of a ‘fitting the curve problem’ with this equation representing yhat (the forecast)of y (the stock market prices) :
 
 <img width="967" alt="image" src="https://github.com/heringo/pro3600/assets/121232962/e2f56741-ebc1-4518-a4b4-ca70259477c4">
 
