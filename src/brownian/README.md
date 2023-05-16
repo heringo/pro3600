@@ -1,18 +1,32 @@
 ## What is it?
 
-In finance, **Geometric Brownian Motion (GBM)** is an approach that allows modeling and simulating financial markets using CNN (**ConvolutionalNeuralNetwork)**. CNNs use a mathematical operation called [convolution](https://en.wikipedia.org/wiki/Convolution) in place of general matrix multiplication in at least one of their layers. When adding an LSTM(LongShortTermMemory) layer, the neural network becomes more apt at forecasting time series data like the stock market which are non-linear. 
+Geometric Brownian Motion (GMB) is a stochastic process that describes the random evolution of a variable over time. It is often used to model or predict stock prices due to its ability to capture key characteristics such as continuous price changes and volatility. GBM assumes that the logarithmic returns of an asset follow a normal distribution.
 
-In our case we used NeuralProphet from Facebook to evaluate the stock market prices by finding the solution of a ‘fitting the curve problem’ with this equation representing yhat (the forecast)of y (the stock market prices) :
+The GBM model is based on the following stochastic differential equation:
 
+dS = μ * S * dt + σ * S * dW
 
+- **`dS`** is the change in the asset price **`S`**
+- **`μ`** is the average expected return (also called drift)
+- **`dt`** is the infinitesimal time step
+- **`σ`** is the standard deviation of the returns (also called volatility)
+- **`dW`** is a Wiener process (random variable)
 
-For further explanation on the Geometric Brownian Motion please check this paper about Geometric Brownian Motion : [NeuralPaper](https://arxiv.org/pdf/2111.15397.pdf). 
+By discretizing the time steps and using numerical methods, it is possible to simulate the future price trajectory of the asset based on the GBM model. 
 
-In the specific context of modeling stock prices, a Geometric Brownian Motion can be used to estimate the price dynamics of financial assets such as stocks. The additive components Trend, Seasonality, Events, AutoRegression correlated with a neural network (that tries to learn the patterns of the stock)make an estimation of the prices and try to forecast them in the future.
+The GBM model finds wide application in various areas of finance, including:
 
-Furthermore, the NeuralProphet model allows for exploring many features to modify the model according to your needs. The main complexity is finding the hyperparameters that will make the best fit for the stock market. Accuracy can vary from a stock to another and we would need to study more deeply the volatility to provide for better and more accurate models as prices aren’t the only features in financial markets.
+**Stock Price Forecasting**
+
+By simulating stock price paths using GBM, analysts can estimate the potential future range of stock prices. These simulations assist in risk assessment, option pricing, and portfolio optimization. GBM's ability to capture volatility and mimic real-world price movements makes it a valuable tool for understanding stock market dynamics.
+
+**Option Pricing**
+
+GBM plays a crucial role in option pricing models, such as the Black-Scholes-Merton model. It assumes that the underlying asset follows GBM, allowing the calculation of the fair value of options based on factors like strike price, time to expiration, and volatility. GBM-based simulations enable investors to assess the potential profitability and risk of various option strategies.
 
 It is important to note that the Geometric Brownian Motion model is a simplified version of reality and rely on specific assumptions and parameters(does not take into account the events unless told and relies on the constant feeding of information). The results obtained from these models can provide useful insights and perspectives on variations in stock prices, but they do not represent a precise prediction of the actual market.
+
+If you want additional details on GMB and its uses for stock modelling or stock prediction, we recommand the following pages :
 
 ## Where to get it ?
 
@@ -25,18 +39,13 @@ Import the following libraries :
 ```
 pip install pandas
 pip install yfinance
-pip install pandas_datareader
 pip install numpy
-pip install matplotlib
-pip install plotly
-pip install plotly_resampler
-pip install datetime
-
+pip install pandas_market_calendars
 ```
 
 ## How to use it ?
 
-Choose your ticker on [main.py](http://main.py/) and run [main.py](http://main.py/)
+Choose your ticker on [brownian.py](http://main.py/) and run [brownian.py](http://main.py/)
 
 '''python
 python3 [main.py](http://main.py/)
@@ -44,14 +53,10 @@ python3 [main.py](http://main.py/)
 
 ## Dependencies
 
-- [NumPy - Adds support for large, multi-dimensional arrays, matrices and high-level mathematical functions to operate on these arrays](https://www.numpy.org/)
-- [python-datetime - Provides powerful extensions to the standard datetime module](https://dateutil.readthedocs.io/en/stable/index.html)
-- [PyTorch-Provides powerful two high-level features: Tensor computation (like NumPy) with strong GPU acceleration and deep neural networks built on a tape-based autograd system.](https://pytorch.org/)
-- [NeuralProphet - Provides framework for interpretable time series forecasting(built on top of FB’ Prophet Model).](https://pypi.org/project/neuralprophet/)
+- [Pandas Market Calendars - Allows us to get the calendar of the stock market for the futur days](https://pypi.org/project/pandas-market-calendars/)
 - [Pandas- Provides fast, flexible, and expressive data structures designed to make working with "relational" or "labeled" data both easy and intuitive.](https://pandas.pydata.org/)
 - [YahooFinance-Provides stock data from Yahoo! Finance’s API.](https://pypi.org/project/yfinance/)
-- [Plotly-Provides an interactive, open-source, and browser-based graphing library.](https://pypi.org/project/plotly/)
-- [Matplotlib-Provides a comprehensive library for creating static, animated, and interactive visualizations in Python.](https://pypi.org/project/matplotlib/)
+- [Numpy - Contains all the basics scientific tools when computing on Python](https://numpy.org)
 
 ## License
 
