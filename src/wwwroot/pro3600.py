@@ -1,3 +1,12 @@
+import sys, os
+
+sys.path.insert(1,os.path.join(os.path.dirname(__file__), '..', 'NeuralProphet'))
+sys.path.insert(1,os.path.join(os.path.dirname(__file__), '..', 'agent'))
+
+import NeuralProphet.main
+import agent.main
+
+
 import yfinance as yf
 from flask import Flask, request, render_template
 import subprocess
@@ -50,12 +59,12 @@ def result():
     S_plot,dates_pred = brownian_function.brownian(ticker, start_day_train,end_day_train,start_day_brownian,end_day_pred,stock)
     
     #Modèle NeuralProphet
-    neural_function = importlib.import_module('neural_function')
-    neural, neural_dates = neural_function.neural(ticker)
+    #neural_function = importlib.import_module('../NeuralProphet/main.py')
+    neural, neural_dates = NeuralProphet.main(ticker)
     
     #Modèle Agent
-    agent_function = importlib.import_module('agent_function')
-    agent_function.main(ticker)
+    #agent_function = importlib.import_module('../agent_function')
+    agent.main(ticker)
 
     #Formatation des données et écriture dans des fichiers txt
 
