@@ -9,7 +9,7 @@ from pandas_datareader import data as pdr
 import datetime
 import plotly_resampler
 from dateutil.relativedelta import relativedelta
-import neural_date
+from neural_date import get_current_date, subtract_years
 import forecast_list_and_dates
 import plot
 
@@ -36,8 +36,8 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
 
     # Set the end date as today's date
     
-    end_date = neural_date.get_current_date()
-    date_from_years_ago = neural_date.subtract_years(end_date, number_of_years)
+    end_date = get_current_date()
+    date_from_years_ago = subtract_years(end_date, number_of_years)
 
     # Set the start date as 10 years before the end date
     start_date =date_from_years_ago
