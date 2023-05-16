@@ -48,6 +48,11 @@ def result():
     end_day_train = auj
     end_day_pred = auj + datetime.timedelta(days=2*30)
 
+    if ticker == "":
+        php_output = subprocess.check_output(
+        ['php', 'pro.php'])
+        return php_output
+
     # Période pour laquelle on telecharge tourtes les données jusqu'à aujourdhui
     stock = yf.download(ticker, start_day_train, end_day_train)
     if stock.empty:
@@ -55,12 +60,12 @@ def result():
         return render_template('erreur.html', ticker=ticker)
     
     #Modèle brownien
-    brownian_function = importlib.import_module('brownian_function')
+    brownian_function = importlib.import_module('brownian')
     S_plot,dates_pred = brownian_function.brownian(ticker, start_day_train,end_day_train,start_day_brownian,end_day_pred,stock)
     
     #Modèle NeuralProphet
-    neural_function = importlib.import_module('neural_function')
-    neural, neural_dates = neural_function.neural(ticker)
+    neural_function = importlib.import_module('main')
+    neural, neural_dates = neural_function.main(ticker)
     
     #Modèle Agent
     agent_function = importlib.import_module('agent_function')

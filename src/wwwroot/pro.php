@@ -971,10 +971,10 @@
           let newdate1 = new Date();  // create a new date object
           let newdate2 = new Date();
           let newdate3 = new Date();
-          if (x==0) {futur = 5; minu = 7;}
-          else if (x==1) {futur = 15; minu = 17;}
-          else if (x==2) {futur = 30; minu = 32;}
-          else if (x==3) {futur = 61; minu = 62;}
+          if (x==0) {futur = 5; minu = 5;}
+          else if (x==1) {futur = 15; minu = 15;}
+          else if (x==2) {futur = 30; minu = 30;}
+          else if (x==3) {futur = 61; minu = 60;}
           if (y==0) {passe = 7;}
           else if (y==1) {passe = 31;}
           else if (y==2) {passe = 61;}

@@ -5,6 +5,7 @@ import time
 import math
 import yfinance as yf
 import statistics as stat
+import sys
 
 import numpy as np
 from scipy.optimize import least_squares
@@ -136,7 +137,7 @@ def get_returns(ticker):
 
     # Extract the necessary data
     start_day = "2022-01-01"
-    end_day = "2023-01-01"
+    end_day = f"{AUJ}"
 
     tickerData = yf.Ticker(tickers_list)
     tickerDf = tickerData.history(period='1d', start=start_day, end=end_day)
@@ -229,12 +230,13 @@ class BaseFunctor:
 
 
 class Functor(BaseFunctor):
-    def __init__(self, stats, print_=False):
+    def __init__(self, stats, last_price, print_=False):
         super().__init__(NR_PARAMS, NR_STATS)
         self.txt = TEXTE
         self.print_ = print_
         self.stats_ = stats
         self.Price = np.zeros(T)
+        self.lastprice = last_price
 
     #La méthode call() est l'opérateur de la fonction appelable qui est appelé lorsque lorsque l'objet est utilisé comme une fonction
     def __call__(self, beta):
@@ -263,7 +265,7 @@ class Functor(BaseFunctor):
             print()
             dp_tm1 = 0
             trading_volume = 0
-            price = 7531.61
+            price = self.lastprice
             Price = np.zeros(T)
             for t in range(BEGIN_DISCARD + T):
                 shock = rng.standard_normal(N)                                          #Un choc aléatoire est généré
@@ -399,23 +401,26 @@ class Functor(BaseFunctor):
         # for i in range(len(self.Price)):
         #     print(self.Price[i])
         
-        
         return 1
 
 
 class Estimation:
-    def __init__(self, r, M, beta0):
+    def __init__(self, r, M, beta0, lastprice):
         self.r = r
         self.stats = np.transpose(M[r])
         self.beta = beta0
         self.Price = 0 
+        self.lastprice = lastprice
         print(self.r, "constructed...")
         #print(self.stats)
 
     def estimation_task(self):
         print("Task", self.r, "starts...")
-        lm = least_squares(Functor(self.stats), self.beta, method='trf')
-        ret = lm.status
+
+        functor=Functor(self.stats, self.lastprice)
+        functor.__call__(self.beta)
+        #lm = least_squares(Functor(self.stats, self.lastprice), self.beta, method='trf')
+        #ret = lm.status
         print("Task", self.r, "completes...")
         #filename = f"{threading.get_ident()}.txt"
         #with open(filename, "a") as f:
@@ -428,6 +433,7 @@ def main(ticker):
 
     rng = np.random.default_rng()
     returns = get_returns(ticker)
+    lastprice = returns[-1]
     M = np.zeros((R, NR_STATS))         #matrice de R lignes et 7 colonnes de statistiques (sigma, kurtosis ...)
 
     #effectue R simulations échantillons bootstrap dont on calcules les paramètres statistiques
@@ -453,7 +459,7 @@ def main(ticker):
     
     
     #vecteur de taille R pour chaque simulation
-    estimations = [Estimation(r, M, beta) for r in range(R)]
+    estimations = [Estimation(r, M, beta, lastprice) for r in range(R)]
 
     #Creation une pool of threads
     with ThreadPoolExecutor() as executor:
@@ -462,10 +468,10 @@ def main(ticker):
     #Toutes les tâches ont été exécuté
 
     #Pour chaque paramètre, il calcule la moyenne, le 5%, la médiane, le 95% et le pourcentage
-    for j in range(NR_PARAMS):
-        tmp = np.array([estimations[r].beta[j] for r in range(R)])
-        tmp.sort()
-        print(f"{j}, moyenne = {stat.mean(tmp)}, 5% = {tmp[int(0.05 * R)]},  médiane = {tmp[int(0.5 * R)]}, 95% = {tmp[int(0.95 * R)]}")
+    #for j in range(NR_PARAMS):
+    #    tmp = np.array([estimations[r].beta[j] for r in range(R)])
+    #    tmp.sort()
+    #    print(f"{j}, moyenne = {stat.mean(tmp)}, 5% = {tmp[int(0.05 * R)]},  médiane = {tmp[int(0.5 * R)]}, 95% = {tmp[int(0.95 * R)]}")
         
 
 if __name__ == "__main__":
