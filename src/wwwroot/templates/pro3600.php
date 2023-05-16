@@ -5,7 +5,8 @@
     <title>Ma page de test</title>
     <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
     <style>
-      #candle {
+      /*création des styles des boutons et des textes*/
+      #candle {                               
         position: absolute;
         top: 673px;
         left: 371.5px;
@@ -596,8 +597,8 @@
     </style>
   </head>
 
-  <body style="background-color: rgb(30, 30, 30)">
-    <div id="tester" style="width: 1015.13px; height: 579px"></div>
+  <body style="background-color: rgb(30, 30, 30)"> 
+    <div id="tester" style="width: 1050px; height: 630px"></div>
     <div id="rec1"></div>
     <div id="rec2"></div>
     <div id="rec3"></div>
@@ -615,12 +616,12 @@
     <hourLow><span class="txt">24h Low</span></hourLow>
     <hourVolume><span class="txt">24h Volume</span></hourVolume>
     <actualPrice><span class="txt">actualPrice</span></actualPrice>
-    <sellHistoric style="white-space: nowrap"
-      ><span class="txt">Historique Des Ventes</span></sellHistoric
-    >
-    <buyHistoric style="white-space: nowrap"
-      ><span class="txt">Historique Des Achats</span></buyHistoric
-    >
+    <sellHistoric style="white-space: nowrap">
+      <span class="txt">Historique Des Ventes</span>
+    </sellHistoric>
+    <buyHistoric style="white-space: nowrap">
+      <span class="txt">Historique Des Achats</span>
+    </buyHistoric>
     <Price><span class="txt">Price</span></Price>
     <Amount><span class="txt">Amount</span></Amount>
     <Total><span class="txt">Total</span></Total>
@@ -649,10 +650,10 @@
     <button id="heureb">1M</button>
     <button id="heurec">2M</button>
     <button id="heured">6M</button>
-    <button id="forea">5M</button>
-    <button id="foreb">15M</button>
-    <button id="forec">30M</button>
-    <button id="fored">1H</button>
+    <button id="forea">5J</button>
+    <button id="foreb">15J</button>
+    <button id="forec">1M</button>
+    <button id="fored">2M</button>
     <button id="sim1">Simulation</button>
     <button id="sim2">Simulation</button>
     <button id="sim3">Simulation</button>
@@ -660,9 +661,6 @@
 
     <form method="POST" action="result">
         <search><input type="text" id="inputValue" name="inputValue" placeholder="Search..." class="search-bar"></search>
-        <button class="image-button" id="loupe">
-          <img src="loupe.png" width="25" class="my-image">
-        </button>
     </form>
 
 
@@ -682,13 +680,26 @@
         $fhist = file("./templates/hist.txt", FILE_IGNORE_NEW_LINES);
         $frapidso = file("./templates/fastso.txt", FILE_IGNORE_NEW_LINES);
         $fslowso = file("./templates/slowso.txt", FILE_IGNORE_NEW_LINES);
-        $fbrownian = file("./templates/brownian.txt", FILE_IGNORE_NEW_LINES);
-        $fabsi_pred = file("./templates/absi_pred.txt", FILE_IGNORE_NEW_LINES);
         $frabsi = file("./templates/rabsi.txt", FILE_IGNORE_NEW_LINES);
         $fropen = file("./templates/ropen.txt", FILE_IGNORE_NEW_LINES);
         $frclose = file("./templates/rclose.txt", FILE_IGNORE_NEW_LINES);
         $frhigh = file("./templates/rhigh.txt", FILE_IGNORE_NEW_LINES);
         $frlow = file("./templates/rlow.txt", FILE_IGNORE_NEW_LINES);
+        $frewma = file("./templates/rewma.txt", FILE_IGNORE_NEW_LINES);
+        $frbolup = file("./templates/rbolup.txt", FILE_IGNORE_NEW_LINES);
+        $frboldown = file("./templates/rboldown.txt", FILE_IGNORE_NEW_LINES);
+        $frrsi = file("./templates/rrsi.txt", FILE_IGNORE_NEW_LINES);
+        $frmacd = file("./templates/rmacd.txt", FILE_IGNORE_NEW_LINES);
+        $frsignal = file("./templates/rsignal.txt", FILE_IGNORE_NEW_LINES);
+        $frhist = file("./templates/rhist.txt", FILE_IGNORE_NEW_LINES);
+        $frrapidso = file("./templates/rfastso.txt", FILE_IGNORE_NEW_LINES);
+        $frslowso = file("./templates/rslowso.txt", FILE_IGNORE_NEW_LINES);
+        $fbrownian = file("./templates/brownian.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi_pred = file("./templates/absi_pred.txt", FILE_IGNORE_NEW_LINES);
+        $fneuralprophet = file("./templates/neuralprophet.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi_neural = file("./templates/absi_neural.txt", FILE_IGNORE_NEW_LINES);
+        $fagent = file("./templates/PredictionAgent.txt", FILE_IGNORE_NEW_LINES);
+        $fabsi_agent = file("./templates/PredictionHeure.txt", FILE_IGNORE_NEW_LINES);
     ?>
     <script>
         var candle = document.getElementById("candle");
@@ -737,13 +748,26 @@
         var his = JSON.parse('<?php echo json_encode($fhist); ?>');
         var fasts = JSON.parse('<?php echo json_encode($frapidso); ?>');
         var slows = JSON.parse('<?php echo json_encode($fslowso); ?>');
-        var brownian = JSON.parse('<?php echo json_encode($fbrownian); ?>');
-        var absi_pred = JSON.parse('<?php echo json_encode($fabsi_pred); ?>');
         var rabsi = JSON.parse('<?php echo json_encode($frabsi); ?>');
         var rope = JSON.parse('<?php echo json_encode($fropen); ?>');
         var rclose = JSON.parse('<?php echo json_encode($frclose); ?>');
         var rhigh = JSON.parse('<?php echo json_encode($frhigh); ?>');
         var rlow = JSON.parse('<?php echo json_encode($frlow); ?>');
+        var rewma = JSON.parse('<?php echo json_encode($frewma); ?>');
+        var rbolup = JSON.parse('<?php echo json_encode($frbolup); ?>');
+        var rboldown = JSON.parse('<?php echo json_encode($frboldown); ?>');
+        var rrs = JSON.parse('<?php echo json_encode($frrsi); ?>');
+        var rmac = JSON.parse('<?php echo json_encode($frmacd); ?>');
+        var rsig = JSON.parse('<?php echo json_encode($frsignal); ?>');
+        var rhis = JSON.parse('<?php echo json_encode($frhist); ?>');
+        var rfasts = JSON.parse('<?php echo json_encode($frrapidso); ?>');
+        var rslows = JSON.parse('<?php echo json_encode($frslowso); ?>');
+        var brownian = JSON.parse('<?php echo json_encode($fbrownian); ?>');
+        var absi_pred = JSON.parse('<?php echo json_encode($fabsi_pred); ?>');
+        var neuralprophet = JSON.parse('<?php echo json_encode($fneuralprophet); ?>');
+        var absi_neural = JSON.parse('<?php echo json_encode($fabsi_neural); ?>');
+        var agent = JSON.parse('<?php echo json_encode($fagent); ?>');
+        var absi_agent = JSON.parse('<?php echo json_encode($fabsi_agent); ?>');
 
         let intordo = ordo.map(parseFloat);
         let intopen = ope.map(parseFloat);
@@ -760,6 +784,8 @@
         let intfastso = fasts.map(parseFloat);
         let intslowso = slows.map(parseFloat);
         let intbrownian = brownian.map(parseFloat);
+        let intneuralprophet = neuralprophet.map(parseFloat);
+        let intagent = agent.map(parseFloat);
         let dabsi = absi.map(function(dateString) {
           return new Date(dateString);
         });
@@ -770,12 +796,29 @@
         let intrclose = rclose.map(parseFloat);
         let intrhigh = rhigh.map(parseFloat);
         let intrlow = rlow.map(parseFloat);
+        let intrewma = rewma.map(parseFloat);
+        let intrbolup = rbolup.map(parseFloat);
+        let intrboldown = rboldown.map(parseFloat);
+        let intrrsi = rrs.map(parseFloat);
+        let intrmacd = rmac.map(parseFloat);
+        let intrsignal = rsig.map(parseFloat);
+        let intrhist = rhis.map(parseFloat);
+        let intrfastso = rfasts.map(parseFloat);
+        let intrslowso = rslows.map(parseFloat);
         let drabsi = rabsi.map(function(dateString) {
+          return new Date(dateString);
+        });
+        let dabsi_neural = absi_neural.map(function(dateString) {
+          return new Date(dateString);
+        });
+        let dabsi_agent = absi_agent.map(function(dateString) {
           return new Date(dateString);
         });
         var cdl = false;
         var jr = true;
         var zm = 0;
+        var fr = 0;
+        var modele = 0;
 
         let check = new Date(drabsi[drabsi.length - 1]);
         let rangebreaker = [];
@@ -802,6 +845,7 @@
         jourfin.setSeconds(0);
         jourdebut.setDate(jourdebut.getDate()-1);
         jourfin.setMilliseconds(0);
+        sim2.style.border = 'none';
 
         function chdate(x) {
           for (let i = 0; i < drabsi.length; i++) {
@@ -827,33 +871,62 @@
           return rangebreaker;
         }
 
-        function mynewFunction(x) {
+        function mynewFunction(y) {
+          if (y==0) {x = 1;}
+          else if (y==1) {x = 6;}
+          else if (y==2) {x = 12;}
+          else if (y==3) {x = 24;}
           window.filteredDates = drabsi.slice(-x*60-1, -1);
           window.subopen = intropen.slice(-filteredDates.length-1, -1);
           window.subclose = intrclose.slice(-filteredDates.length-1, -1);
           window.subhigh = intrhigh.slice(-filteredDates.length-1, -1);
           window.sublow = intrlow.slice(-filteredDates.length-1, -1);
           window.subordo = subclose;
+          window.subewma = intrewma.slice(-filteredDates.length-1, -1);
+          window.subbolup = intrbolup.slice(-filteredDates.length-1, -1);
+          window.subboldown = intrboldown.slice(-filteredDates.length-1, -1);
+          window.subrsi = intrrsi.slice(-filteredDates.length-1, -1);
+          window.submacd = intrmacd.slice(-filteredDates.length-1, -1);
+          window.subsignal = intrsignal.slice(-filteredDates.length-1, -1);
+          window.subhist = intrhist.slice(-filteredDates.length-1, -1);
+          window.subfastso = intrfastso.slice(-filteredDates.length-1, -1);
+          window.subslowso = intrslowso.slice(-filteredDates.length-1, -1);
           window.layout = {
             paper_bgcolor:'rgba(0,0,0,0)',
             plot_bgcolor:'rgba(0,0,0,0)',
             xaxis: {
-              rangebreaks: cleaning()
+              rangebreaks: cleaning(),
+              title: 'Time',
+              titlefont: {
+                color: 'rgb(220,220,220)' // Couleur de la police de l'axe X
+              },
+              tickfont: {
+                color: 'rgb(220,220,220)' // Couleur de la police des graduations de l'axe X
+              }
+            },
+            yaxis: {
+            title: 'Price ($)',
+            titlefont: {
+              color: 'rgb(220,220,220)' // Couleur de la police de l'axe Y
+            },
+            tickfont: {
+              color: 'rgb(220,220,220)' // Couleur de la police des graduations de l'axe Y
+            }
             }
           };
         }
 
-        function myFunctionD(x) {
+        function myFunctionD(y) {
+          if (y==0) {x = 7;}
+          else if (y==1) {x = 31;}
+          else if (y==2) {x = 61;}
+          else if (y==3) {x = 61*3;}
           const currentDate = new Date();
           let newdate = new Date();  // create a new date object
           newdate.setDate(currentDate.getDate() - x);  // take off x days to the date
           window.filteredDates = dabsi.filter(function(date) {
             let nDate = new Date(date);
             return (nDate >= newdate && nDate <= currentDate);
-          });
-          window.filteredDates_pred = dabsi_pred.filter(function(date) {
-            let nDate = new Date(date);
-            return (nDate >= newdate);
           });
           window.subordo = intordo.slice(-filteredDates.length-1, -1);
           window.subopen = intopen.slice(-filteredDates.length-1, -1);
@@ -869,13 +942,82 @@
           window.subhist = inthist.slice(-filteredDates.length-1, -1);
           window.subfastso = intfastso.slice(-filteredDates.length-1, -1);
           window.subslowso = intslowso.slice(-filteredDates.length-1, -1);
-          window.subbrownian = intbrownian.slice(-filteredDates_pred.length-1, -1);
           window.layout = {
             paper_bgcolor:'rgba(0,0,0,0)',
             plot_bgcolor:'rgba(0,0,0,0)',
+            xaxis: {
+              title: 'Time',
+              titlefont: {
+                color: 'rgb(220,220,220)' // Couleur de la police de l'axe X
+              },
+              tickfont: {
+                color: 'rgb(220,220,220)' // Couleur de la police des graduations de l'axe X
+              }
+            },
+            yaxis: {
+            title: 'Price ($)',
+            titlefont: {
+              color: 'rgb(220,220,220)' // Couleur de la police de l'axe Y
+            },
+            tickfont: {
+              color: 'rgb(220,220,220)' // Couleur de la police des graduations de l'axe Y
+            }
+            }
           };
         }
-        myFunctionD(7);
+
+        function filtragej(x,y) {
+          const currentDate = new Date();
+          let newdate1 = new Date();  // create a new date object
+          let newdate2 = new Date();
+          let newdate3 = new Date();
+          if (x==0) {futur = 5; minu = 7;}
+          else if (x==1) {futur = 15; minu = 17;}
+          else if (x==2) {futur = 30; minu = 32;}
+          else if (x==3) {futur = 61; minu = 62;}
+          if (y==0) {passe = 7;}
+          else if (y==1) {passe = 31;}
+          else if (y==2) {passe = 61;}
+          else if (y==3) {passe = 61*3;}
+          newdate1.setDate(currentDate.getDate() + futur);  // add off x days to the date
+          newdate2.setDate(currentDate.getDate() - passe);  // take off x days to the date
+          window.filteredDates_pred = dabsi_pred.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate <= newdate1);
+          });
+          window.subbrownian = intbrownian.slice(0, filteredDates_pred.length);
+          window.filteredDates_pred = filteredDates_pred.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate >= newdate2);
+          });
+          window.subbrownian = subbrownian.slice(-filteredDates_pred.length-1, -1);
+          
+          window.filteredDates_neural = dabsi_neural.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate <= newdate1);
+          });
+          window.subneuralprophet = intneuralprophet.slice(0, filteredDates_neural.length);
+          window.filteredDates_neural = filteredDates_neural.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate >= newdate2);
+          });
+          window.subneuralprophet = subneuralprophet.slice(-filteredDates_neural.length-1, -1);
+
+          newdate3.setHours(13);
+          newdate3.setMinutes(30);
+          newdate3.setSeconds(0);
+          newdate3.setMilliseconds(0);
+          newdate3.setMinutes(currentDate.getMinutes() + minu);
+
+          window.filteredDates_agent = dabsi_agent.filter(function(date) {
+            let nDate = new Date(date);
+            return (nDate <= newdate3);
+          });
+          window.subagent = intagent.slice(0, filteredDates_agent.length);
+        }
+
+        myFunctionD(0);
+        filtragej(0,0);
 ////////////////////////////////////////////////////////////////////////////
       
         function mycandle() {
@@ -885,7 +1027,48 @@
             open: subopen,
             high: subhigh,
             close: subclose,
-            low: sublow, type: 'candlestick'}], layout);
+            low: sublow, type: 'candlestick'}], layout, {displayModeBar: false});
+        }
+
+        function myplot() {
+          TESTER = document.getElementById('tester');
+          Plotly.newPlot( TESTER, [{
+          x: filteredDates,
+          y: subordo,
+          line: {color: 'rgb(52, 152, 219)'}
+          }], layout, {displayModeBar: false});
+        }
+
+        function aiguille() {
+          if (modele == 1) {
+            mybrownian();
+          }
+          else if (modele == 2) {
+            myagent();
+          }
+          else if (modele == 3) {
+            myneural();
+          }
+          else if (modele == 4) {
+            myewma();
+          }
+          else if (modele == 5) {
+            mybollinger();
+          }
+          else if (modele == 6) {
+            myrsi();
+          }
+          else if (modele == 7) {
+            mymacd();
+          }
+          else if (modele == 8) {
+            myso();
+          }
+          else if (modele == 0) {
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
+        }
         }
 
         candle.addEventListener('click', function() {
@@ -893,30 +1076,12 @@
           candle.style.color = 'white';
           classic.style.backgroundColor ='rgb(30, 30, 30)';
           classic.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (jr) {
-            sim3.style.backgroundColor ='rgb(30, 30, 30)'
-            sim3.style.color = '#8295B2';
-            sim1.style.backgroundColor ='rgb(30, 30, 30)'
-            sim1.style.color = '#8295B2';}
-          else {
-            sim2.style.backgroundColor ='rgb(30, 30, 30)'
-            sim2.style.color = '#8295B2';
-          }
-          mycandle();
           cdl = true;
+          aiguille();
         });
 
         minutes.addEventListener('click', function() {
+          if (modele == 1 || modele == 3) {modele = 0;}
           minutes.style.backgroundColor ='#546EE5';
           minutes.style.color = 'white';
           jours.style.backgroundColor ='rgb(30, 30, 30)';
@@ -929,70 +1094,32 @@
           textforeb.textContent = "15M";
           textforec.textContent = "30M";
           textfored.textContent = "1H";
+          if (jr) {
+            sim2.style.border = sim1.style.borderStyle;
+            sim3.style.border = 'none';
+            sim1.style.border = 'none';
+            sim2.style.backgroundColor ='rgb(30, 30, 30)';
+            sim2.style.color = '#8295B2';
+            sim3.style.backgroundColor ='#373d4c';
+            sim3.style.color = '#8295B2';
+            sim1.style.backgroundColor ='#373d4c';
+            sim1.style.color = '#8295B2';}
           jr = false;
-          sim2.style.backgroundColor ='rgb(30, 30, 30)';
-          sim2.style.color = '#8295B2';
-          sim3.style.backgroundColor ='#373d4c';
-          sim3.style.color = '#8295B2';
-          sim1.style.backgroundColor ='#373d4c';
-          sim1.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (zm==0) {mynewFunction(1);}
-          else if (zm==1) {mynewFunction(6);}
-          else if (zm==2) {mynewFunction(12);}
-          else if (zm==3) {mynewFunction(24);}
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
+          mynewFunction(zm);
+          aiguille();
         });
-        
-        function myplot() {
-          TESTER = document.getElementById('tester');
-          Plotly.newPlot( TESTER, [{
-          x: filteredDates,
-          y: subordo,
-          line: {color: 'rgb(52, 152, 219)'}
-          }], layout);
-        }
 
         classic.addEventListener('click', function() {
           classic.style.backgroundColor ='#546EE5'
           classic.style.color = 'white';
           candle.style.backgroundColor ='rgb(30, 30, 30)';
           candle.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (jr) {
-            sim3.style.backgroundColor ='rgb(30, 30, 30)';
-            sim3.style.color = '#8295B2';
-            sim1.style.backgroundColor ='rgb(30, 30, 30)';
-            sim1.style.color = '#8295B2';}
-          else {
-            sim2.style.backgroundColor ='rgb(30, 30, 30)'
-            sim2.style.color = '#8295B2';
-          }
-          myplot();
           cdl = false;
+          aiguille();
         });
 
         jours.addEventListener('click', function() {
+          if (modele == 2) {modele = 0;}
           jours.style.backgroundColor ='#546EE5'
           jours.style.color = 'white';
           minutes.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1005,30 +1132,19 @@
           textforeb.textContent = "15J";
           textforec.textContent = "1M";
           textfored.textContent = "2M";
+          if (!jr) {
+            sim3.style.border = sim2.style.borderStyle;
+            sim1.style.border = sim2.style.borderStyle;
+            sim2.style.border = 'none';
+            sim2.style.backgroundColor ='#373d4c';
+            sim2.style.color = '#8295B2';
+            sim3.style.backgroundColor ='rgb(30, 30, 30)';
+            sim3.style.color = '#8295B2';
+            sim1.style.backgroundColor ='rgb(30, 30, 30)';
+            sim1.style.color = '#8295B2';}
           jr = true
-          sim2.style.backgroundColor ='#373d4c';
-          sim2.style.color = '#8295B2';
-          sim3.style.backgroundColor ='rgb(30, 30, 30)';
-          sim3.style.color = '#8295B2';
-          sim1.style.backgroundColor ='rgb(30, 30, 30)';
-          sim1.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (zm==0) {myFunctionD(7);}
-          else if (zm==1) {myFunctionD(31);}
-          else if (zm==2) {myFunctionD(61);}
-          else if (zm==3) {myFunctionD(3*61);}
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
+          myFunctionD(zm);
+          aiguille();
         });
 
         heurea.addEventListener('click', function() {
@@ -1041,30 +1157,10 @@
           heurec.style.color = '#8295B2';
           heured.style.backgroundColor ='rgb(30, 30, 30)';
           heured.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (jr) {
-            sim3.style.backgroundColor ='rgb(30, 30, 30)';
-            sim3.style.color = '#8295B2';
-            sim1.style.backgroundColor ='rgb(30, 30, 30)';
-            sim1.style.color = '#8295B2';}
-          else {
-            sim2.style.backgroundColor ='rgb(30, 30, 30)';
-            sim2.style.color = '#8295B2';
-          }
-          if (jr) {myFunctionD(7);}
-          else {mynewFunction(1);}
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
+          if (jr) {myFunctionD(zm);}
+          else {mynewFunction(zm);}
+          filtragej(fr,zm);
+          aiguille();
         });
 
         heureb.addEventListener('click', function() {
@@ -1077,30 +1173,10 @@
           heurec.style.color = '#8295B2';
           heured.style.backgroundColor ='rgb(30, 30, 30)';
           heured.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (jr) {
-            sim3.style.backgroundColor ='rgb(30, 30, 30)';
-            sim3.style.color = '#8295B2';
-            sim1.style.backgroundColor ='rgb(30, 30, 30)';
-            sim1.style.color = '#8295B2';}
-          else {
-            sim2.style.backgroundColor ='rgb(30, 30, 30)';
-            sim2.style.color = '#8295B2';
-          }
-          if (jr) {myFunctionD(31);}
-          else {mynewFunction(6);}
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
+          if (jr) {myFunctionD(zm);}
+          else {mynewFunction(zm);}
+          filtragej(fr,zm);
+          aiguille();
         });
 
         heurec.addEventListener('click', function() {
@@ -1113,30 +1189,10 @@
           heurea.style.color = '#8295B2';
           heured.style.backgroundColor ='rgb(30, 30, 30)';
           heured.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (jr) {
-            sim3.style.backgroundColor ='rgb(30, 30, 30)';
-            sim3.style.color = '#8295B2';
-            sim1.style.backgroundColor ='rgb(30, 30, 30)';
-            sim1.style.color = '#8295B2';}
-          else {
-            sim2.style.backgroundColor ='rgb(30, 30, 30)';
-            sim2.style.color = '#8295B2';
-          }
-          if (jr) {myFunctionD(61);}
-          else {mynewFunction(12);}
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
+          if (jr) {myFunctionD(zm);}
+          else {mynewFunction(zm);}
+          filtragej(fr,zm);
+          aiguille();
         });
 
         heured.addEventListener('click', function() {
@@ -1149,33 +1205,14 @@
           heurec.style.color = '#8295B2';
           heurea.style.backgroundColor ='rgb(30, 30, 30)';
           heurea.style.color = '#8295B2';
-          ema.style.backgroundColor ='rgb(30, 30, 30)';
-          ema.style.color = '#8295B2';
-          bollinger.style.backgroundColor ='rgb(30, 30, 30)';
-          bollinger.style.color = '#8295B2';
-          macd.style.backgroundColor ='rgb(30, 30, 30)';
-          macd.style.color = '#8295B2';
-          rsi.style.backgroundColor ='rgb(30, 30, 30)';
-          rsi.style.color = '#8295B2';
-          so.style.backgroundColor ='rgb(30, 30, 30)';
-          so.style.color = '#8295B2';
-          if (jr) {
-            sim3.style.backgroundColor ='rgb(30, 30, 30)';
-            sim3.style.color = '#8295B2';
-            sim1.style.backgroundColor ='rgb(30, 30, 30)';
-            sim1.style.color = '#8295B2';}
-          else {
-            sim2.style.backgroundColor ='rgb(30, 30, 30)';
-            sim2.style.color = '#8295B2';
-          }
-          if (jr) {myFunctionD(3*61);}
-          else {mynewFunction(24);}
-          if (cdl) {
-            mycandle();
-          } else {myplot();}
+          if (jr) {myFunctionD(zm);}
+          else {mynewFunction(zm);}
+          filtragej(fr,zm);
+          aiguille();
         });
 
         forea.addEventListener('click', function() {
+          fr = 0;
           forea.style.backgroundColor ='#546EE5'
           forea.style.color = 'white';
           foreb.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1184,9 +1221,24 @@
           forec.style.color = '#8295B2';
           fored.style.backgroundColor ='rgb(30, 30, 30)';
           fored.style.color = '#8295B2';
-        });
+          filtragej(fr,zm);
+          if (modele == 1) {
+            mybrownian();
+          }
+          else if (modele == 2) {
+            myagent();
+          }
+          else if (modele == 3) {
+            myneural();
+          }
+          else if (modele == 0) {
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
+        }});
 
         foreb.addEventListener('click', function() {
+          fr = 1;
           foreb.style.backgroundColor ='#546EE5'
           foreb.style.color = 'white';
           forea.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1195,9 +1247,25 @@
           forec.style.color = '#8295B2';
           fored.style.backgroundColor ='rgb(30, 30, 30)';
           fored.style.color = '#8295B2';
+          filtragej(fr,zm);
+          if (modele == 1) {
+            mybrownian();
+          }
+          else if (modele == 2) {
+            myagent();
+          }
+          else if (modele == 3) {
+            myneural();
+          }
+          else if (modele == 0) {
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
+        }
         });
 
         forec.addEventListener('click', function() {
+          fr = 2;
           forec.style.backgroundColor ='#546EE5'
           forec.style.color = 'white';
           foreb.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1206,9 +1274,25 @@
           forea.style.color = '#8295B2';
           fored.style.backgroundColor ='rgb(30, 30, 30)';
           fored.style.color = '#8295B2';
+          filtragej(fr,zm);
+          if (modele == 1) {
+            mybrownian();
+          }
+          else if (modele == 2) {
+            myagent();
+          }
+          else if (modele == 3) {
+            myneural();
+          }
+          else if (modele == 0) {
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
+        }
         });
 
         fored.addEventListener('click', function() {
+          fr = 3;
           fored.style.backgroundColor ='#546EE5'
           fored.style.color = 'white';
           foreb.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1217,6 +1301,21 @@
           forec.style.color = '#8295B2';
           forea.style.backgroundColor ='rgb(30, 30, 30)';
           forea.style.color = '#8295B2';
+          filtragej(fr,zm);
+          if (modele == 1) {
+            mybrownian();
+          }
+          else if (modele == 2) {
+            myagent();
+          }
+          else if (modele == 3) {
+            myneural();
+          }
+          else if (modele == 0) {
+          if (cdl) {
+            mycandle();
+          } else {myplot();}
+        }
         });
 
      //////////////////////////////////////////////////////////////////////////
@@ -1233,7 +1332,7 @@
             open: subopen,
             high: subhigh,
             close: subclose,
-            low: sublow, type: 'candlestick'}], layout);
+            low: sublow, type: 'candlestick'}], layout, {displayModeBar: false});
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1246,12 +1345,13 @@
             y: subordo,
             name: 'Stock Price',
             line: {color: 'rgb(52, 152, 219)'}
-            }], layout);
+            }], layout, {displayModeBar: false});
           }
         }
 
         ema.addEventListener('click', function() {
           if (ema.style.backgroundColor == 'rgb(30, 30, 30)') {
+            modele = 4;
             ema.style.backgroundColor ='#546EE5'
             ema.style.color = 'white';
             bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1275,6 +1375,7 @@
           } else {
             ema.style.backgroundColor ='rgb(30, 30, 30)';
             ema.style.color = '#8295B2';
+            modele = 0;
             if (cdl) {
               mycandle();
             } else {myplot();}
@@ -1323,6 +1424,7 @@
 
         bollinger.addEventListener('click', function() {
             if (bollinger.style.backgroundColor == 'rgb(30, 30, 30)') {
+                modele = 5;
                 bollinger.style.backgroundColor ='#546EE5'
                 bollinger.style.color = 'white';
                 ema.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1346,6 +1448,7 @@
             } else {
                 bollinger.style.backgroundColor ='rgb(30, 30, 30)';
                 bollinger.style.color = '#8295B2';
+                modele = 0;
                 if (cdl) {
                 mycandle();
                 } else {myplot();}
@@ -1366,7 +1469,7 @@
             open: subopen,
             high: subhigh,
             close: subclose,
-            low: sublow, type: 'candlestick'}], layout);
+            low: sublow, type: 'candlestick'}], layout, {displayModeBar: false});
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1378,12 +1481,13 @@
             x: filteredDates,
             y: subordo,
             name: 'Stock Price',
-            line: {color: 'rgb(52, 152, 219)'} }], layout);
+            line: {color: 'rgb(52, 152, 219)'} }], layout, {displayModeBar: false});
           }
         }
 
         rsi.addEventListener('click', function() {
           if (rsi.style.backgroundColor == 'rgb(30, 30, 30)') {
+            modele = 6;
             rsi.style.backgroundColor ='#546EE5'
             rsi.style.color = 'white';
             bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1405,6 +1509,7 @@
           }
             myrsi();
           } else {
+            modele = 0;
             rsi.style.backgroundColor ='rgb(30, 30, 30)';
             rsi.style.color = '#8295B2';
             if (cdl) {
@@ -1430,7 +1535,7 @@
               y: subhist,
               name: 'Difference',
               type:'bar'
-            }], layout);
+            }], layout, {displayModeBar: false});
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1452,6 +1557,7 @@
 
         macd.addEventListener('click', function() {
           if (macd.style.backgroundColor == 'rgb(30, 30, 30)') {
+            modele = 7;
             macd.style.backgroundColor ='#546EE5'
             macd.style.color = 'white';
             bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1473,6 +1579,7 @@
           }
             mymacd();
           } else {
+            modele = 0;
             macd.style.backgroundColor ='rgb(30, 30, 30)';
             macd.style.color = '#8295B2';
             if (cdl) {
@@ -1525,7 +1632,7 @@
               color: 'rgb(243, 58, 18)',
               width: 4
             }
-            }], layout);
+            }], layout, {displayModeBar: false});
           } else {
             TESTER = document.getElementById('tester');
             Plotly.newPlot( TESTER, [{
@@ -1559,12 +1666,13 @@
               color: 'rgb(243, 58, 18)',
               width: 4
             }
-            }], layout);
+            }], layout, {displayModeBar: false});
           }
         }
 
         so.addEventListener('click', function() {
           if (so.style.backgroundColor == 'rgb(30, 30, 30)') {
+            modele = 8;
             so.style.backgroundColor ='#546EE5'
             so.style.color = 'white';
             bollinger.style.backgroundColor ='rgb(30, 30, 30)';
@@ -1586,6 +1694,7 @@
           }
             myso();
           } else {
+            modele = 0;
             so.style.backgroundColor ='rgb(30, 30, 30)';
             so.style.color = '#8295B2';
             if (cdl) {
@@ -1596,7 +1705,25 @@
         });
 ////////////////////////////////////////////////////////////////:
         function mybrownian() {
-            TESTER = document.getElementById('tester');
+          TESTER = document.getElementById('tester');
+          if (cdl) {
+            Plotly.newPlot( TESTER, [{
+            x: filteredDates_pred,
+            y: subbrownian,
+            name: 'Brownian',
+            line: {color: 'rgb(243, 156, 18)'}
+            },{
+            x: filteredDates,
+            open: subopen,
+            high: subhigh,
+            close: subclose,
+            low: sublow, 
+            type: 'candlestick',
+            name: 'Stock Price',
+            line: {color: 'rgb(52, 152, 219)'}
+            }], layout, {displayModeBar: false});
+          }
+          else {
             Plotly.newPlot( TESTER, [{
             x: filteredDates_pred,
             y: subbrownian,
@@ -1607,7 +1734,8 @@
             y: subordo,
             name: 'Stock Price',
             line: {color: 'rgb(52, 152, 219)'}
-            }], layout);
+            }], layout, {displayModeBar: false});
+          }
         }
 
         sim3.addEventListener('click', function() {
@@ -1625,10 +1753,144 @@
             so.style.color = '#8295B2';
             ema.style.backgroundColor ='rgb(30, 30, 30)';
             ema.style.color = '#8295B2';
+            modele = 1;
+            sim1.style.backgroundColor ='rgb(30, 30, 30)';
+            sim1.style.color = '#8295B2';
             mybrownian();
           } else {
             sim3.style.backgroundColor ='rgb(30, 30, 30)';
             sim3.style.color = '#8295B2';
+            modele = 0;
+            if (cdl) {
+              mycandle();
+            } else {
+              myplot();
+            }
+          }}
+        });
+
+        ////////////////////////////////////////////////////////////////:
+        function myagent() {
+          TESTER = document.getElementById('tester');
+          if (cdl) {
+            Plotly.newPlot( TESTER, [{
+            x: filteredDates_agent,
+            y: subagent,
+            name: 'Agent',
+            line: {color: 'rgb(243, 156, 18)'}
+            },{
+            x: filteredDates,
+            open: subopen,
+            high: subhigh,
+            close: subclose,
+            low: sublow, 
+            type: 'candlestick',
+            name: 'Stock Price',
+            line: {color: 'rgb(52, 152, 219)'}
+            }], layout, {displayModeBar: false});
+          }
+          else {
+            Plotly.newPlot( TESTER, [{
+            x: filteredDates_agent,
+            y: subagent,
+            name: 'Agent',
+            line: {color: 'rgb(243, 156, 18)'}
+            },{
+            x: filteredDates,
+            y: subordo,
+            name: 'Stock Price',
+            line: {color: 'rgb(52, 152, 219)'}
+            }], layout, {displayModeBar: false});
+          }
+        }
+
+        sim2.addEventListener('click', function() {
+          if (!jr) {
+          if (sim2.style.backgroundColor == 'rgb(30, 30, 30)') {
+            sim2.style.backgroundColor ='#546EE5'
+            sim2.style.color = 'white';
+            bollinger.style.backgroundColor ='rgb(30, 30, 30)';
+            bollinger.style.color = '#8295B2';
+            macd.style.backgroundColor ='rgb(30, 30, 30)';
+            macd.style.color = '#8295B2';
+            rsi.style.backgroundColor ='rgb(30, 30, 30)';
+            rsi.style.color = '#8295B2';
+            so.style.backgroundColor ='rgb(30, 30, 30)';
+            so.style.color = '#8295B2';
+            ema.style.backgroundColor ='rgb(30, 30, 30)';
+            ema.style.color = '#8295B2';
+            modele = 2;
+            myagent();
+          } else {
+            sim2.style.backgroundColor ='rgb(30, 30, 30)';
+            sim2.style.color = '#8295B2';
+            modele = 0;
+            if (cdl) {
+              mycandle();
+            } else {
+              myplot();
+            }
+          }}
+        });
+
+        ///////////////////////////////////////////////////////////
+        function myneural() {
+            TESTER = document.getElementById('tester');
+            if (cdl) {
+              Plotly.newPlot( TESTER, [{
+              x: filteredDates_neural,
+              y: subneuralprophet,
+              name: 'Neural',
+              line: {color: 'rgb(243, 156, 18)'}
+              },{
+              x: filteredDates,
+              open: subopen,
+              high: subhigh,
+              close: subclose,
+              low: sublow, 
+              type: 'candlestick',
+              name: 'Stock Price',
+              line: {color: 'rgb(52, 152, 219)'}
+              }], layout, {displayModeBar: false});
+            }
+            else {
+              Plotly.newPlot( TESTER, [{
+              x: filteredDates_neural,
+              y: subneuralprophet,
+              name: 'Neural',
+              line: {color: 'rgb(243, 156, 18)'}
+              },{
+              x: filteredDates,
+              y: subordo,
+              name: 'Stock Price',
+              line: {color: 'rgb(52, 152, 219)'}
+              }], layout, {displayModeBar: false});
+          }
+        }
+
+        sim1.addEventListener('click', function() {
+          if (jr) {
+          if (sim1.style.backgroundColor == 'rgb(30, 30, 30)') {
+            sim1.style.backgroundColor ='#546EE5'
+            sim1.style.color = 'white';
+            bollinger.style.backgroundColor ='rgb(30, 30, 30)';
+            bollinger.style.color = '#8295B2';
+            macd.style.backgroundColor ='rgb(30, 30, 30)';
+            macd.style.color = '#8295B2';
+            rsi.style.backgroundColor ='rgb(30, 30, 30)';
+            rsi.style.color = '#8295B2';
+            so.style.backgroundColor ='rgb(30, 30, 30)';
+            so.style.color = '#8295B2';
+            ema.style.backgroundColor ='rgb(30, 30, 30)';
+            ema.style.color = '#8295B2';
+            modele = 3;
+            sim3.style.backgroundColor ='rgb(30, 30, 30)';
+            sim3.style.color = '#8295B2';
+            myneural();
+          } else {
+            sim1.style.backgroundColor ='rgb(30, 30, 30)'
+            sim1.style.color = '#8295B2';
+            modele = 0;
             if (cdl) {
               mycandle();
             } else {
