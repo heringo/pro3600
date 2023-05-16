@@ -971,10 +971,10 @@
           let newdate1 = new Date();  // create a new date object
           let newdate2 = new Date();
           let newdate3 = new Date();
-          if (x==0) {futur = 5; minu = 5;}
-          else if (x==1) {futur = 15; minu = 15;}
-          else if (x==2) {futur = 30; minu = 30;}
-          else if (x==3) {futur = 61; minu = 60;}
+          if (x==0) {futur = 5; minu = 1;}
+          else if (x==1) {futur = 15; minu = 2;}
+          else if (x==2) {futur = 30; minu = 3;}
+          else if (x==3) {futur = 61; minu = 6;}
           if (y==0) {passe = 7;}
           else if (y==1) {passe = 31;}
           else if (y==2) {passe = 61;}
@@ -1003,11 +1003,10 @@
           });
           window.subneuralprophet = subneuralprophet.slice(-filteredDates_neural.length-1, -1);
 
-          newdate3.setHours(13);
           newdate3.setMinutes(30);
           newdate3.setSeconds(0);
           newdate3.setMilliseconds(0);
-          newdate3.setMinutes(currentDate.getMinutes() + minu);
+          newdate3.setHours(13 + minu);
 
           window.filteredDates_agent = dabsi_agent.filter(function(date) {
             let nDate = new Date(date);
@@ -1090,10 +1089,10 @@
           textheureb.textContent = "6H";
           textheurec.textContent = "12H";
           textheured.textContent = "1J";
-          textforea.textContent = "5M";
-          textforeb.textContent = "15M";
-          textforec.textContent = "30M";
-          textfored.textContent = "1H";
+          textforea.textContent = "1H";
+          textforeb.textContent = "2H";
+          textforec.textContent = "3H";
+          textfored.textContent = "6H";
           if (jr) {
             sim2.style.border = sim1.style.borderStyle;
             sim3.style.border = 'none';
