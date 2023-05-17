@@ -1914,7 +1914,7 @@
       var valeursStatistiques = valeurs.map(function(nombre) {
         return nombre.toFixed(3);
       });
-      var nomsStatistiques = ["Avg Log Return","Avg Absolute Yield","Standart Deviation","Kurtonis","Skewness","Studentized Range","Rank Corrolation 1","Rank Corrolation 10"];
+      var nomsStatistiques = ["Avg Log Return","Avg Absolute Yield","Standart Deviation","Kurtosis","Skewness","Studentized Range","Rank Correlation 1","Rank Corrolation 10"];
 
       // Sélection de l'élément <ul> qui contiendra les statistiques
       var listeStatistiques = document.getElementById('liste-statistiques');
