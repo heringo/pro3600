@@ -127,6 +127,7 @@ def result():
     slowso = open("./templates/slowso.txt", "w")
     brownian = open("./templates/brownian.txt", "w")
     neuralprophet = open("./templates/neuralprophet.txt", "w")
+    stock_name = open("./templates/stock_name.txt", "w")
     for i in range(len(neural_dates)):
         absi_neural.write(neural_dates[i]+'\n')
     for i in range(len(dates_pred)):
@@ -153,6 +154,7 @@ def result():
             newneural = str(neural[i])
             neuralprophet.write(newneural+'\n')
         newa = str(date[i]).split()[0]
+    
         ordo.write(newo+'\n')
         ope.write(newop+'\n')
         close.write(newcl+'\n')
@@ -168,6 +170,8 @@ def result():
         hist.write(newhist+'\n')
         fastso.write(newfastso+'\n')
         slowso.write(newslowso+'\n')
+    stock_name.write(str(ticker)+'\n')
+    stock_name.close()
     ordo.close()
     ope.close()
     high.close()
