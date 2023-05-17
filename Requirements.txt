@@ -19,3 +19,4 @@ pandas_market_calendars
 subprocess
 typing
 itertools
+php>=8.2.4
