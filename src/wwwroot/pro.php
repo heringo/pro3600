@@ -486,7 +486,7 @@
         height: 119px;
         left: 374px;
         top: 890px;
-        border: 1px solid #222839;
+        border: 2px solid #222839;
         border-radius: 20px;
       }
 
@@ -497,7 +497,7 @@
         height: 119px;
         left: 596px;
         top: 890px;
-        border: 1px solid #222839;
+        border: 2px solid #222839;
         border-radius: 20px;
       }
 
@@ -508,7 +508,7 @@
         height: 119px;
         left: 818px;
         top: 890px;
-        border: 1px solid #222839;
+        border: 2px solid #222839;
         border-radius: 20px;
       }
 
@@ -516,115 +516,117 @@
         box-sizing: border-box;
         position: absolute;
         width: 302px;
-        height: 361px;
-        left: 41px;
-        top: 648px;
-        border: 1px solid #222839;
+        height: 300px;
+        left: 35px;
+        top: 620px;
+        border: 2px solid #222839;
         border-radius: 20px;
+        max-width: 370px; /* Limite de largeur */
+        overflow: auto; /* Ajout de défilement en cas de dépassement */
+      }
+      .titre-statistiques {
+        font-size: 14px;
+        color: #8295B2;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        word-wrap: break-word;
+        text-align: center;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      .nom-statistique {
+        color: #8295B2; 
+        font-family: Arial, sans-serif; 
+        font-size: 13px;
+        margin-left: 50px;
+      }
+
+      .valeur-statistique {
+        font-family: Arial, sans-serif; 
+        font-size: 13px;
+        color: white;
+        word-wrap: break-word;
       }
 
       #rec5 {
         box-sizing: border-box;
         position: absolute;
-        width: 370px;
-        height: 887px;
-        left: 1062px;
-        top: 99px;
-        border: 1px solid #222839;
+        width: 302px;
+        height: 300px;
+        right: 35px;
+        top: 620px;
+        border: 2px solid #222839;
         border-radius: 20px;
+        max-width: 370px; /* Limite de largeur */
+        overflow: auto; /* Ajout de défilement en cas de dépassement */
+      }
+      .titre-infos-stock {
+        position: absolute;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #8295B2;
+        word-wrap: break-word;
+        text-align: center;
+        margin-top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #nom-stock {
+        position: relative;
+        left: 50%;
+        top: 70px;
+        transform: translateX(-50%);
+        font-family: Arial, sans-serif;
+        color: white;
+        font-size: 50px;
+        text-align: center;
       }
 
-      OAS {
+
+      pageTitle .txt{
         position: absolute;
-        left: 77px;
-        top: 659px;
-      }
-      lastPrice {
-        position: absolute;
-        top: 22px;
-        left: 545px;
-      }
-      hourChange {
-        position: absolute;
-        top: 22px;
-        left: 665.5px;
-      }
-      hourHigh {
-        position: absolute;
-        top: 22px;
-        left: 805px;
-      }
-      hourLow {
-        position: absolute;
-        top: 22px;
-        left: 929.5px;
-      }
-      hourVolume {
-        position: absolute;
-        top: 22px;
-        left: 1050px;
-      }
-      actualPrice {
-        position: absolute;
-        left: 1166px;
-        top: 29px;
-      }
-      sellHistoric {
-        position: absolute;
-        top: 114.2px;
-        left: 1076px;
-      }
-      buyHistoric {
-        position: absolute;
-        top: 564.2px;
-        left: 1076px;
-      }
-      Price {
-        position: absolute;
-        top: 154px;
-        left: 1076px;
-      }
-      Amount {
-        position: absolute;
-        top: 154px;
-        left: 1182px;
-      }
-      Total {
-        position: absolute;
-        top: 154px;
-        left: 1296px;
+        top: 30px;
+        left: 555px;
+        font-size: 40px;
+        color: #8295B2;
       }
     </style>
   </head>
 
   <body style="background-color: rgb(30, 30, 30)"> 
-    <div id="tester" style="width: 1050px; height: 630px"></div>
+    <div id="tester" style="width: 1400px; height: 630px"></div>
     <div id="rec1"></div>
     <div id="rec2"></div>
     <div id="rec3"></div>
-    <div id="rec4"></div>
-    <div id="rec5"></div>
+    <div id="rec4">
+      <h2 class="titre-statistiques">OUTILS D'ANALYSE STATISTIQUES</h2>
+      <ul id="liste-statistiques">
+      </ul>
+    </div>
+    <div id="rec5">
+      <h2 class="titre-infos-stock">SYMBOLE BOURSIER</h2>
+      <p id="nom-stock"></p>
+    </div>
 
     <type><span class="txt">Type</span></type>
     <mode><span class="txt">Mode</span></mode>
     <outil><span class="txt">Outils d'Analyse Technique</span></outil>
     <heu><span class="txt">Temps</span></heu>
     <fore><span class="txt">Forecasting</span></fore>
-    <lastPrice><span class="txt">Last Price</span></lastPrice>
-    <hourChange><span class="txt">24h Change</span></hourChange>
-    <hourHigh><span class="txt">24h High</span></hourHigh>
-    <hourLow><span class="txt">24h Low</span></hourLow>
-    <hourVolume><span class="txt">24h Volume</span></hourVolume>
-    <actualPrice><span class="txt">actualPrice</span></actualPrice>
-    <sellHistoric style="white-space: nowrap">
-      <span class="txt">Historique Des Ventes</span>
-    </sellHistoric>
-    <buyHistoric style="white-space: nowrap">
-      <span class="txt">Historique Des Achats</span>
-    </buyHistoric>
-    <Price><span class="txt">Price</span></Price>
-    <Amount><span class="txt">Amount</span></Amount>
-    <Total><span class="txt">Total</span></Total>
+    <pageTitle><span class="txt">PRO3600 : Visualize Finance</span></pageTitle>
+
     <div style="text-align: center">
       <Prophet><span class="txt">Modèle<br />NeuralProphet</span></Prophet>
     </div>
@@ -634,7 +636,6 @@
     <div style="text-align: center">
       <agentbased><span class="txt">Modèle Basé<br />Agent</span></agentbased>
     </div>
-    <OAS><span class="txt">Outils d’Analyse Statistique</span></OAS>
 
     <!-- Create the button -->
     <button id="candle">CANDLESTICKS</button>
@@ -700,6 +701,8 @@
         $fabsi_neural = file("./templates/absi_neural.txt", FILE_IGNORE_NEW_LINES);
         $fagent = file("./templates/PredictionAgent.txt", FILE_IGNORE_NEW_LINES);
         $fabsi_agent = file("./templates/PredictionHeure.txt", FILE_IGNORE_NEW_LINES);
+        $fstats = file("./plot/stats.txt", FILE_IGNORE_NEW_LINES);
+        $fstock_name = file("./templates/stock_name.txt", FILE_IGNORE_NEW_LINES);
     ?>
     <script>
         var candle = document.getElementById("candle");
@@ -768,6 +771,8 @@
         var absi_neural = JSON.parse('<?php echo json_encode($fabsi_neural); ?>');
         var agent = JSON.parse('<?php echo json_encode($fagent); ?>');
         var absi_agent = JSON.parse('<?php echo json_encode($fabsi_agent); ?>');
+        var stats = JSON.parse('<?php echo json_encode($fstats); ?>');
+        var stock_name = JSON.parse('<?php echo json_encode($fstock_name); ?>');
 
         let intordo = ordo.map(parseFloat);
         let intopen = ope.map(parseFloat);
@@ -786,6 +791,7 @@
         let intbrownian = brownian.map(parseFloat);
         let intneuralprophet = neuralprophet.map(parseFloat);
         let intagent = agent.map(parseFloat);
+        let intstats = stats.map(parseFloat);
         let dabsi = absi.map(function(dateString) {
           return new Date(dateString);
         });
@@ -1899,6 +1905,50 @@
         });
 
       myplot();
+
+    </script>
+
+    <script>
+      // Liste des valeurs des statistiques, 3 chiffres après la virgule
+      var valeurs = intstats;
+      var valeursStatistiques = valeurs.map(function(nombre) {
+        return nombre.toFixed(3);
+      });
+      var nomsStatistiques = ["Avg Log Return","Avg Absolute Yield","Standart Deviation","Kurtonis","Skewness","Studentized Range","Rank Corrolation 1","Rank Corrolation 10"];
+
+      // Sélection de l'élément <ul> qui contiendra les statistiques
+      var listeStatistiques = document.getElementById('liste-statistiques');
+
+      // Parcourir la liste des valeurs et générer les statistiques
+      for (var i = 0; i < valeursStatistiques.length; i++) {
+        // Crée un nouvel élément <li>
+        var nouvelElementLi = document.createElement('li');
+
+        // Crée un élément <strong> pour le nom de la statistique
+        var nouvelElementNomStatistique = document.createElement('strong');
+        nouvelElementNomStatistique.className = 'nom-statistique';
+        nouvelElementNomStatistique.textContent = nomsStatistiques[i] + " : "
+
+        // Crée un élément <span> pour la valeur de la statistique
+        var nouvelElementValeurStatistique = document.createElement('span');
+        nouvelElementValeurStatistique.className = 'valeur-statistique';
+        nouvelElementValeurStatistique.textContent = valeursStatistiques[i];
+
+        // Ajouter les éléments au <li>
+        nouvelElementLi.appendChild(nouvelElementNomStatistique);
+        nouvelElementLi.appendChild(nouvelElementValeurStatistique);
+
+        // Ajouter le <li> à la liste des statistiques
+        listeStatistiques.appendChild(nouvelElementLi);
+      }
+    </script>
+    <script>
+
+      // Sélectionnez l'élément <p> avec l'ID "nom-stock"
+      var elementNomStock = document.getElementById("nom-stock");
+
+      // Attribuez la valeur de la variable "stock_name" à l'élément <p>
+      elementNomStock.textContent = stock_name;
     </script>
   </body>
 </html>
