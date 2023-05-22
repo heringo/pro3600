@@ -565,7 +565,7 @@
         position: absolute;
         width: 302px;
         height: 300px;
-        right: 35px;
+        left: 1045px;
         top: 620px;
         border: 2px solid #222839;
         border-radius: 20px;
