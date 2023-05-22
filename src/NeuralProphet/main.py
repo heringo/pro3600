@@ -9,12 +9,12 @@ from pandas_datareader import data as pdr
 import datetime
 import plotly_resampler
 from dateutil.relativedelta import relativedelta
-from neural_date import get_current_date, subtract_years
+import neural_date
 import forecast_list_and_dates
 import plot
+import plotly.express as px
 
-
-def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_years : int = 10):
+def main(ticker : str ='MSFT' ,forecast_period : int = 60 , number_of_training_years : int = 2):
     """ Simulation of the market 'ticker' using yahoo finance. 
 
 
@@ -36,8 +36,8 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
 
     # Set the end date as today's date
     
-    end_date = get_current_date()
-    date_from_years_ago = subtract_years(end_date, number_of_years)
+    end_date = neural_date.get_current_date()
+    date_from_years_ago = neural_date.subtract_years(end_date, number_of_years)
 
     # Set the start date as 10 years before the end date
     start_date =date_from_years_ago
@@ -64,11 +64,11 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
 
     #Instantiate the model with parameters
 
-    m=NeuralProphet(changepoints_range=0.98,n_changepoints=30,batch_size=128,epochs=150)
-
+    m=NeuralProphet(changepoints_range=0.95,n_changepoints=50,batch_size=128,epochs=150,n_lags=1,n_forecasts=forecast_period,ar_layers=[32],loss_func='Huber',optimizer='AdamW',normalize='auto',seasonality_mode='multiplicative',yearly_seasonality=True,weekly_seasonality=True,daily_seasonality=False)
     #Fitting the model
 
     m.fit(df)
+    
 
     #Modify the data using .makefuture_dataframe to get the new dates with +forecast_period dates
 
@@ -79,13 +79,13 @@ def main(ticker : str ='AAPL' ,forecast_period : int = 60 , number_of_training_y
 
     forecast=m.predict(future)
     
-
-    #If you want to plot unhashtag the following :
+    #If you want to plot the data launch this :
     
-    #plot.plotting(m,forecast).show()
-
-    #Get the values and the dates of the forecast into the correct format for putting them in a .txt afterwards
-    return forecast_list_and_dates.forecastvalues(forecast), forecast_list_and_dates.forecastdates(forecast)
+    #plot.plotting(m,forecast,forecast_period).show()
+    
+    #Get the correct format to file into .txt the values and the dates of the forecast
+    
+    return forecast_list_and_dates.forecastvalues(forecast,forecast_period), forecast_list_and_dates.forecastdates(forecast)
 
 if __name__=='__main__':
          main()
