@@ -1,6 +1,5 @@
 
 import datetime
-
 def get_current_date():
     """This function does the following: It gets the current date and returns it in the format YYYY-MM-DD
 
