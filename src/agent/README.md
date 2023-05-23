@@ -14,6 +14,10 @@ It is important to note that agent-based models are simplifications of reality a
 
 The source code is currently hosted on GitHub at: [https://github.com/heringo/pro3600](https://github.com/heringo/pro3600)
 
+## Principal source 
+
+https://theses.hal.science/tel-01950289/document
+
 ## Required installations
 
 Import the following libraries :
@@ -35,9 +39,7 @@ pip install threading
 
 Choose your ticker on main.py and run main.py
 
-'''python
 python3 main.py
-'''
 
 ## Dependencies
 
