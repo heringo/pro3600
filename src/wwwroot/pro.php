@@ -565,11 +565,7 @@
         position: absolute;
         width: 302px;
         height: 300px;
-<<<<<<< HEAD
         left : 1045px;
-=======
-        left: 1045px;
->>>>>>> 9c53553568637aa80faf4927cd388d5a0f99677a
         top: 620px;
         border: 2px solid #222839;
         border-radius: 20px;
