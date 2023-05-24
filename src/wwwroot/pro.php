@@ -565,7 +565,7 @@
         position: absolute;
         width: 302px;
         height: 300px;
-        left : 1045px;
+        right: 35px;
         top: 620px;
         border: 2px solid #222839;
         border-radius: 20px;
@@ -826,29 +826,54 @@
         var fr = 0;
         var modele = 0;
 
+        let check = new Date(drabsi[drabsi.length - 1]);
+        let rangebreaker = [];
+        let debut = new Date();
+        let fin = new Date();
+        debut.setHours(20);
+        debut.setMinutes(00);
+        debut.setSeconds(0);
+        debut.setMilliseconds(0);
+        fin.setHours(13);
+        fin.setMinutes(30);
+        fin.setSeconds(0);
+        debut.setDate(debut.getDate()-1);
+        fin.setMilliseconds(0);
+
+        let jourdebut = new Date();
+        let jourfin = new Date();
+        jourdebut.setHours(0);
+        jourdebut.setMinutes(0);
+        jourdebut.setSeconds(0);
+        jourdebut.setMilliseconds(0);
+        jourfin.setHours(0);
+        jourfin.setMinutes(0);
+        jourfin.setSeconds(0);
+        jourdebut.setDate(jourdebut.getDate()-1);
+        jourfin.setMilliseconds(0);
         sim2.style.border = 'none';
 
         function chdate(x) {
           for (let i = 0; i < drabsi.length; i++) {
-            if (x.getFullYear() === drabsi[i].getFullYear() && x.getMonth() === drabsi[i].getMonth() && x.getDate() === drabsi[i].getDate() && x.getHours() === drabsi[i].getHours() && x.getMinutes() === drabsi[i].getMinutes()) {
+            if (x.getFullYear() === drabsi[i].getFullYear() && x.getMonth() === drabsi[i].getMonth() && x.getDate() === drabsi[i].getDate()) {
               return true;
             }
           }
           return false;
         }
 
-
         function cleaning() {
-          let check = new Date(drabsi[0]);
-          let rangebreaker = [];
-          for (let i=1; i<drabsi.length; i++) {
+          for (let i=0; i<30; i++) {
+            rangebreaker.push({bounds: [new Date(debut), new Date(fin)]});
             if (!(chdate(check))) {
-              rangebreaker.push({bounds: [new Date(drabsi[i-2]), new Date(drabsi[i-1])]});
-              check = new Date(drabsi[i]);
+              rangebreaker.push({bounds: [new Date(jourdebut), new Date(jourfin)]});
             }
-            else {check.setMinutes(check.getMinutes()+1);}
+            debut.setDate(debut.getDate()-1);
+            fin.setDate(fin.getDate()-1);
+            jourdebut.setDate(jourdebut.getDate()-1);
+            jourfin.setDate(jourfin.getDate()-1);
+            check.setDate(check.getDate()-1);
           }
-          rangebreaker.push({bounds: [new Date(drabsi[drabsi.length-1]), new Date(dabsi_agent[0])]});
           return rangebreaker;
         }
 
@@ -1889,7 +1914,7 @@
       var valeursStatistiques = valeurs.map(function(nombre) {
         return nombre.toFixed(3);
       });
-      var nomsStatistiques = ["Avg Log Return","Avg Absolute Yield","Standart Deviation","Kurtosis","Skewness","Studentized Range","Rank Correlation 1","Rank Corrolation 10"];
+      var nomsStatistiques = ["Avg Log Return","Avg Absolute Yield","Standart Deviation","Kurtonis","Skewness","Studentized Range","Rank Corrolation 1","Rank Corrolation 10"];
 
       // Sélection de l'élément <ul> qui contiendra les statistiques
       var listeStatistiques = document.getElementById('liste-statistiques');
