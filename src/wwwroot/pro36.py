@@ -1,12 +1,3 @@
-import sys, os
-
-# sys.path.insert(1,os.path.join(os.path.dirname(__file__), '../NeuralProphet', 'NeuralProphet'))
-# sys.path.insert(1,os.path.join(os.path.dirname(__file__), '..', 'agent'))
-
-# import NeuralProphet.main
-# import agent.main
-
-
 import yfinance as yf
 from flask import Flask, request, render_template
 import subprocess
@@ -14,9 +5,6 @@ import subprocess
 import pandas as pd
 
 import yfinance as yf
-# import math
-# import numpy as np
-# import pandas_market_calendars as mcal
 from datetime import timedelta, datetime
 import yahoo_fin.stock_info as si
 import importlib
