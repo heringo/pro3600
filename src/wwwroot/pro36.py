@@ -20,6 +20,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
+    testdata = si.get_data('BTC-EUR', start_date=auj - datetime.timedelta(days=1), end_date=auj, interval='1m')
+    print(testdata)
+
     php_output = subprocess.check_output(
         ['php', 'pro.php'])
     return php_output
@@ -50,7 +53,7 @@ def result():
     
     testdata = si.get_data(ticker, start_date=auj - datetime.timedelta(days=1), end_date=auj, interval='1m')
 
-    test = testdata.index[0].hour==0 and testdata.index[-1].hour==0
+    test = testdata.index[0].hour==0 and testdata.index[-4].hour==23
 
     if test:
         php_output = subprocess.check_output(
