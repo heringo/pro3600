@@ -36,6 +36,7 @@ def result():
     end_day_train = auj
     end_day_pred = auj + datetime.timedelta(days=2*30)
 
+
     if ticker == "":
         php_output = subprocess.check_output(
         ['php', 'pro.php'])
@@ -46,6 +47,15 @@ def result():
     if stock.empty:
         error_message = "Le ticker '{}' n'existe pas.".format(ticker)
         return render_template('erreur.html', ticker=ticker)
+    
+    testdata = si.get_data(ticker, start_date=auj - datetime.timedelta(days=1), end_date=auj, interval='1m')
+
+    test = testdata.index[0].hour==0 and testdata.index[-1].hour==0
+
+    if test:
+        php_output = subprocess.check_output(
+        ['php', 'pro.php'])
+        return php_output
     
     #Modèle brownien
     brownian_function = importlib.import_module('brownian')
